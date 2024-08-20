@@ -32,4 +32,5 @@ module com.group_finity.mascot {
     exports com.group_finity.mascot.x11.jna;
     exports com.joconner.i18n;
     exports hqx;
+    exports com.group_finity.mascot.glossbird;
 }

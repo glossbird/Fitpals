@@ -46,9 +46,11 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
     public static final Path CONFIG_DIRECTORY = Paths.get("conf");
+    public static final Path DATA_DIRECTORY = Paths.get("data");
     public static final Path IMAGE_DIRECTORY = Paths.get("img");
     public static final Path SOUND_DIRECTORY = Paths.get("sound");
     public static final Path SETTINGS_FILE = CONFIG_DIRECTORY.resolve("settings.properties");
+    public static final Path SAVE_FILE = DATA_DIRECTORY.resolve("save.properties");
     public static final Path LOGGING_FILE = CONFIG_DIRECTORY.resolve("logging.properties");
     public static final Path THEME_FILE = CONFIG_DIRECTORY.resolve("theme.properties");
     public static final Path ICON_FILE = IMAGE_DIRECTORY.resolve("icon.png");
@@ -211,8 +213,14 @@ public class Main {
             exit();
         }
 
+        // Load Save Data
+        // saveLoad();
+
         // Create the tray icon
         createTrayIcon();
+
+
+
 
         // Create mascots
         for (String imageSet : imageSets) {
