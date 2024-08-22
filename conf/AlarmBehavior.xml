@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Mascot xmlns="http://www.group-finity.com/Mascot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.group-finity.com/Mascot Mascot.xsd">
+
+    <BehaviorList>
+        <!-- ALWAYS REQUIRED -->
+        <Behavior Name="ChaseMouse" Frequency="0">
+            <NextBehaviorList Add="false">
+                <BehaviorReference Name="SitAndFaceMouse" Frequency="1"/>
+            </NextBehaviorList>
+        </Behavior>
+
+        <Behavior Name="SitAndFaceMouse" Frequency="0">
+            <NextBehaviorList Add="false">
+                <BehaviorReference Name="SitAndFaceMouse" Frequency="100"/>
+                <BehaviorReference Name="SitAndSpinHead" Frequency="1"/>
+                <BehaviorReference Name="SitWhileDanglingLegs" Frequency="1"/>
+            </NextBehaviorList>
+        </Behavior>
+
+        <Behavior Name="SitAndSpinHead" Frequency="0">
+            <NextBehaviorList Add="false">
+                <BehaviorReference Name="SitAndFaceMouse" Frequency="1"/>
+            </NextBehaviorList>
+        </Behavior>
+
+        <!-- ALWAYS REQUIRED -->
+        <Behavior Name="Fall" Frequency="0"/>
+
+        <!-- ALWAYS REQUIRED -->
+        <Behavior Name="Dragged" Frequency="0"/>
+
+        <!-- ALWAYS REQUIRED -->
+        <Behavior Name="Thrown" Frequency="0"/>
+
+        <Behavior Name="Alarm" Frequency="100"/>
+    </BehaviorList>
+</Mascot>

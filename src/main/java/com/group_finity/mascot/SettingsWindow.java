@@ -115,7 +115,7 @@ public class SettingsWindow extends JDialog {
         }
         sldOpacity.setValue((int) (opacity * 100));
         sldScaling.setValue((int) (scaling * 10));
-
+        listData.add("Home");
         listData.addAll(Arrays.asList(properties.getProperty("InteractiveWindows", "").split("/")));
         // This prevents the UI list from having empty entries,
         // and prevents those empty entries from being saved to settings.properties

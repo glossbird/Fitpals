@@ -36,6 +36,10 @@
         <Behavior Name="PullUp" Frequency="0" Hidden="true"/>
         <Behavior Name="Divided" Frequency="0" Hidden="true"/>
 
+        <!-- Alarm -->
+        <Behavior Name ="Alarm" Frequency="0" Hidden="true"/>
+        <Behavior Name ="AlarmRing" Frequency="0" Hidden="true"/>
+
         <!-- On the Floor -->
         <Condition Condition="#{mascot.environment.floor.isOn(mascot.anchor)}">
             <Behavior Name="StandUp" Frequency="200" Hidden="true"/>

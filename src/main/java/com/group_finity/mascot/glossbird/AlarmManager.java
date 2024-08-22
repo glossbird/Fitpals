@@ -1,17 +1,22 @@
 package com.group_finity.mascot.glossbird;
 
+import com.group_finity.mascot.Main;
+
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Alarm {
+public class AlarmManager {
 
     public static Calendar alarmTime = Calendar.getInstance();
     public static Timer timer = new Timer();
     public static boolean enabled = false;
-    public Alarm()
+    int hour = 12;
+    int minute = 0;
+    public AlarmManager()
     {
-
+        super();
+        this.SetAlarmTime(alarmTime.get(Calendar.HOUR), alarmTime.get(Calendar.MINUTE)+1);
     }
 
     public void init()
@@ -25,16 +30,42 @@ public class Alarm {
 
     }
 
+    public void SetHour(int hour)
+    {
+        this.hour = hour;
+        alarmTime.set(Calendar.HOUR, this.hour);
+    }
+
+    public void SetMinute(int minute)
+    {
+        this.minute = minute;
+        alarmTime.set(Calendar.MINUTE, this.minute);
+    }
+
+    public int GetHour()
+    {
+        return this.hour;
+    }
+
+    public int GetMinute()
+    {
+        return this.minute;
+    }
+
+
+
+
+
 
 
     public void Schedule()
     {
 
-        timer.cancel();
         timer.schedule(new TimerTask() {
             @Override
             public void run()
             {
+                Main.getInstance().getManager().setBehaviorAll("Alarm");
                 System.out.println("Alarm test");
             }
 

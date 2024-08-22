@@ -2,9 +2,11 @@ package com.group_finity.mascot;
 
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.config.Entry;
+import com.group_finity.mascot.environment.home.HomeUI;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.exception.ConfigurationException;
+import com.group_finity.mascot.glossbird.AlarmManager;
 import com.group_finity.mascot.image.ImagePairs;
 import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
 import com.group_finity.mascot.sound.Sounds;
@@ -216,6 +218,7 @@ public class Main {
         // Load Save Data
         // saveLoad();
 
+        new HomeUI();
         // Create the tray icon
         createTrayIcon();
 
@@ -236,7 +239,7 @@ public class Main {
             }
             createMascot(imageSet);
         }
-
+        new AlarmManager();
         getManager().start();
     }
 
@@ -1267,7 +1270,7 @@ public class Main {
         return configurations.get(imageSet);
     }
 
-    private Manager getManager() {
+    public Manager getManager() {
         return manager;
     }
 
