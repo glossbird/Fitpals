@@ -1,17 +1,21 @@
 package com.group_finity.mascot.environment.home;
 
 import com.group_finity.mascot.environment.home.UI.AlarmPanel;
+import com.group_finity.mascot.glossbird.Screenshot;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class HomeUI {
 
     Rectangle bounds;
     HomeArea areaLink;
     AlarmPanel alarmPanel;
+    Screenshot screenshot;
+
     public HomeUI()
     {
         super();
@@ -22,7 +26,21 @@ public class HomeUI {
         JTextField textField = new JTextField(50);
         JLabel homeLabel = new JLabel("Home");
         JButton alarmButton = new JButton("Alarm");
+        JButton trinkets = new JButton("Trinkets");
+        JButton selfie = new JButton("Selfie");
         alarmButton.setSize(200,100);
+        selfie.setSize(100,100);
+        screenshot = new Screenshot();
+        selfie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    screenshot.MakeScreenshot();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         alarmPanel = new AlarmPanel();
         alarmButton.addActionListener(new ActionListener(){
             @Override
@@ -35,6 +53,7 @@ public class HomeUI {
         });
         contentPane.add(homeLabel, BorderLayout.CENTER);
         contentPane.add(alarmButton);
+        contentPane.add(selfie);
         Rectangle boundsTwo = getMaxWindowBounds(frame);
 
         bounds = new Rectangle(100, 100, 300, 400);

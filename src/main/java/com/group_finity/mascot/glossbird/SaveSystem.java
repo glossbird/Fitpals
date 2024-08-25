@@ -1,5 +1,9 @@
 package com.group_finity.mascot.glossbird;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -19,6 +23,27 @@ public class SaveSystem {
             }
 
         }
+
+        JsonFactory factory = JsonFactory.builder()
+// configure, if necessary:
+                .enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)
+                .build();
+
+
+
     }
+
+    public void Load()
+    {
+        ObjectMapper mapper = new ObjectMapper();
+
+    }
+
+    public void Save()
+    {
+
+    }
+
+
 
 }

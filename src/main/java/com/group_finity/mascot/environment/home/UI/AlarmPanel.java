@@ -2,6 +2,7 @@ package com.group_finity.mascot.environment.home.UI;
 
 import com.group_finity.mascot.environment.home.HomeUI;
 import com.group_finity.mascot.glossbird.AlarmManager;
+import com.group_finity.mascot.glossbird.Screenshot;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +12,8 @@ public class AlarmPanel {
 
     JFrame alarmPanel;
     AlarmManager alarmManager;
+    int hour;
+    int minute;
 
     public AlarmPanel(){
         super();
