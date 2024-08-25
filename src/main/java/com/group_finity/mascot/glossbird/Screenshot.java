@@ -3,6 +3,8 @@ package com.group_finity.mascot.glossbird;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,11 @@ import static com.group_finity.mascot.Main.IMAGE_DIRECTORY;
 
 public class Screenshot {
 
-
+    public JFrame notif;
+    public BufferedImage thumb;
+    public BufferedImage combined;
+    public BufferedImage capture;
+    boolean showFriendInSelfie = false;
     public Screenshot()
     {
         super();
@@ -27,9 +33,96 @@ public class Screenshot {
         return newImage;
     }
 
+    public void MakeThumbnail(BufferedImage image)
+    {
+        if(thumb != null)
+            thumb.flush();
+        thumb = convertToBufferedImage(image.getScaledInstance(200, 113, Image.SCALE_SMOOTH));
+
+    }
+
+    public void OpenScreenshotNotif()
+    {
+        notif = new JFrame("Selfie!");
+
+        GridBagLayout layout = new GridBagLayout();
+        JPanel panel = new JPanel(layout);
+        notif.setSize(350,275);
+
+        JLabel picLabel = new JLabel(new ImageIcon(thumb));
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridy = 0;
+        c.gridx = 0;
+        panel.add(picLabel,c);
+        c.gridy = 1;
+        JLabel textLabel = new JLabel("Wow! Cool selfie!");
+        panel.add(textLabel,c);
+        c.gridy =2;
+
+        JButton openButton = new JButton("Save picture");
+        panel.add(openButton,c);
+        JCheckBox showPal = new JCheckBox("Show pal");
+        showFriendInSelfie = true;
+        showPal.setSelected(showFriendInSelfie);
+        c.gridy = 4;
+        showPal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(showPal.isSelected())
+                {
+                    showFriendInSelfie = true;
+                    MakeThumbnail(combined);
+                }
+                else
+                {
+                    showFriendInSelfie = false;
+                    MakeThumbnail(capture);
+                }
+
+                picLabel.setIcon(new ImageIcon(thumb));
+            }
+        });
+        panel.add(showPal,c);
+        openButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent evt)
+            {
+                try {
+                    SaveImage();
+                    Desktop.getDesktop().open( new File( "screenshot.png" ));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+
+        });
+        notif.getContentPane().add(panel);
+        notif.setVisible(true);
+    }
+
+    public void SaveImage()
+    {
+
+        try {
+            if(showFriendInSelfie)
+            {
+                ImageIO.write(combined, "png", new File("screenshot.png"));
+            }
+            else
+            {
+                ImageIO.write(capture, "png", new File("screenshot.png"));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public void MakeScreenshot() throws IOException {
         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-        BufferedImage capture = null;
+        capture = null;
         try {
             capture = new Robot().createScreenCapture(screenRect);
         } catch (AWTException e) {
@@ -38,16 +131,24 @@ public class Screenshot {
 
         BufferedImage overlay = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), "ShimejiMonroe/Selfie_overlay.png"));
         BufferedImage scaled = convertToBufferedImage(overlay.getScaledInstance(screenRect.width, screenRect.height, Image.SCALE_SMOOTH));
-        BufferedImage combined = new BufferedImage(screenRect.width, screenRect.height, BufferedImage.TYPE_INT_ARGB);
+        if(combined  != null)
+            combined.flush();
+        combined = new BufferedImage(screenRect.width, screenRect.height, BufferedImage.TYPE_INT_ARGB);
+
+
         Graphics g = combined.createGraphics();
+
         g.drawImage(capture,0,0,null);
         g.drawImage(scaled,0,0,null);
 
+        MakeThumbnail(combined);
+
         try {
-            ImageIO.write(combined, "png", new File("screenshot.png"));
+            ImageIO.write(thumb, "png", new File("thumb.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        OpenScreenshotNotif();
     }
 
 

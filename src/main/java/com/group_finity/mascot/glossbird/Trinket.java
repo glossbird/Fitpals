@@ -10,6 +10,7 @@ public class Trinket {
     public boolean claimed;
     public boolean loaded;
     public MascotData associatedMascot;
+    public String mascotName;
 
     public Trinket()
     {
@@ -18,6 +19,7 @@ public class Trinket {
         this.imagePath = "";
         this.claimed = false;
         this.loaded = false;
+        this.mascotName = "";
     }
 
     public void Load(String name, int id, String imagePath, boolean claimed, MascotData mascot)
@@ -28,6 +30,7 @@ public class Trinket {
         this.claimed = claimed;
         this.loaded = true;
         this.associatedMascot = mascot;
+        this.mascotName = mascot.toString();
     }
 
     public void LoadImage()
