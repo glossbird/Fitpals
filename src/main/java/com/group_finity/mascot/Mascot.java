@@ -317,6 +317,10 @@ public class Mascot {
         final JMenuItem onlyOneMenu = new JMenuItem(languageBundle.getString("DismissAllOthers"));
         onlyOneMenu.addActionListener(event -> getManager().remainOne(this));
 
+        final JMenuItem makeMain = new JMenuItem(languageBundle.getString("MakeMain"));
+        makeMain.addActionListener(event -> getManager().SetMain(this));
+
+
         // "Restore IE!" menu item
         final JMenuItem restoreMenu = new JMenuItem(languageBundle.getString("RestoreWindows"));
         restoreMenu.addActionListener(event -> NativeFactory.getInstance().getEnvironment().restoreIE());
@@ -404,6 +408,7 @@ public class Mascot {
         popup.add(disposeMenu);
         popup.add(oneMenu);
         popup.add(onlyOneMenu);
+        popup.add(makeMain);
         popup.add(closeMenu);
 
         // TODO Get the popup to close when clicking outside of it

@@ -1,13 +1,20 @@
 package com.group_finity.mascot.environment.home;
 
+import com.group_finity.mascot.Main;
+import com.group_finity.mascot.environment.Location;
 import com.group_finity.mascot.environment.home.UI.AlarmPanel;
 import com.group_finity.mascot.glossbird.Screenshot;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+
+import static com.group_finity.mascot.Main.IMAGE_DIRECTORY;
 
 public class HomeUI {
 
@@ -15,9 +22,9 @@ public class HomeUI {
     HomeArea areaLink;
     AlarmPanel alarmPanel;
     Screenshot screenshot;
+    Point loc;
 
-    public HomeUI()
-    {
+    public HomeUI() throws IOException {
         super();
         JFrame frame = new JFrame("Home");
         Container contentPane = frame.getContentPane();
@@ -28,9 +35,12 @@ public class HomeUI {
         JButton alarmButton = new JButton("Alarm");
         JButton trinkets = new JButton("Trinkets");
         JButton selfie = new JButton("Selfie");
+        BufferedImage selfieImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), Main.getInstance().getMainMascot().getImageSet() + "/ui/selfie.png"));
+        selfie.setIcon(new ImageIcon(selfieImg));
+
         alarmButton.setSize(200,100);
         selfie.setSize(100,100);
-        screenshot = new Screenshot();
+        screenshot = new Screenshot(this);
         selfie.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,7 +51,7 @@ public class HomeUI {
                 }
             }
         });
-        alarmPanel = new AlarmPanel();
+        alarmPanel = new AlarmPanel(Main.getInstance().getAlarmManager());
         alarmButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent evt)
@@ -58,7 +68,8 @@ public class HomeUI {
 
         bounds = new Rectangle(100, 100, 300, 400);
         frame.setBounds(bounds);
-        frame.setLocation(boundsTwo.x + boundsTwo.width - frame.getWidth(), boundsTwo.y + boundsTwo.height - frame.getHeight());
+        loc = new Point((boundsTwo.x + boundsTwo.width - frame.getWidth()),boundsTwo.y + boundsTwo.height - frame.getHeight());
+        frame.setLocation(loc);
         frame.setUndecorated(true);
 
 
@@ -87,5 +98,11 @@ public class HomeUI {
     {
 
     }
+
+    public Point GetHomePosition()
+    {
+        return loc;
+    }
+
 
 }

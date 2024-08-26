@@ -52,7 +52,7 @@ public class Main {
     public static final Path IMAGE_DIRECTORY = Paths.get("img");
     public static final Path SOUND_DIRECTORY = Paths.get("sound");
     public static final Path SETTINGS_FILE = CONFIG_DIRECTORY.resolve("settings.properties");
-    public static final Path SAVE_FILE = DATA_DIRECTORY.resolve("save.txt");
+    public static final Path SAVE_FILE = DATA_DIRECTORY.resolve("save.json");
     public static final Path LOGGING_FILE = CONFIG_DIRECTORY.resolve("logging.properties");
     public static final Path THEME_FILE = CONFIG_DIRECTORY.resolve("theme.properties");
     public static final Path ICON_FILE = IMAGE_DIRECTORY.resolve("icon.png");
@@ -218,7 +218,7 @@ public class Main {
         // Load Save Data
         // saveLoad();
 
-        new HomeUI();
+
         // Create the tray icon
         createTrayIcon();
 
@@ -239,10 +239,26 @@ public class Main {
             }
             createMascot(imageSet);
         }
-        new AlarmManager();
+        setAlarmManager( new AlarmManager());
+
+        try {
+            new HomeUI();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         getManager().start();
     }
+    boolean mainMascotSet = false;
 
+    public AlarmManager getAlarmManager() {
+        return alarmManager;
+    }
+
+    public void setAlarmManager(AlarmManager alarmManager) {
+        this.alarmManager = alarmManager;
+    }
+
+    AlarmManager alarmManager;
     /**
      * Loads the configuration files for the given image set.
      *
@@ -1015,6 +1031,16 @@ public class Main {
         }
     }
 
+    public Mascot getMainMascot() {
+        return mainMascot;
+    }
+
+    public void setMainMascot(Mascot mainMascot) {
+        this.mainMascot = mainMascot;
+    }
+
+    public Mascot mainMascot;
+
     /**
      * Creates a random {@link Mascot}.
      */
@@ -1034,7 +1060,11 @@ public class Main {
 
         // Create one mascot
         final Mascot mascot = new Mascot(imageSet);
-
+        if(!mainMascotSet)
+        {
+            setMainMascot(mascot);
+            mainMascotSet = true;
+        }
         // Create it outside the bounds of the screen
         mascot.setAnchor(new Point(-4000, -4000));
 

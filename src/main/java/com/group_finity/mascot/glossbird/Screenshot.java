@@ -1,5 +1,9 @@
 package com.group_finity.mascot.glossbird;
 
+import com.group_finity.mascot.Main;
+import com.group_finity.mascot.environment.Border;
+import com.group_finity.mascot.environment.home.HomeUI;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +18,16 @@ import static com.group_finity.mascot.Main.IMAGE_DIRECTORY;
 public class Screenshot {
 
     public JFrame notif;
+    public JFrame preview;
     public BufferedImage thumb;
     public BufferedImage combined;
     public BufferedImage capture;
     boolean showFriendInSelfie = false;
-    public Screenshot()
+    HomeUI home;
+    public Screenshot(HomeUI home)
     {
         super();
+        this.home = home;
     }
     public static BufferedImage convertToBufferedImage(Image image)
     {
@@ -41,15 +48,43 @@ public class Screenshot {
 
     }
 
+    public void OpenPreview()
+    {
+        preview = new JFrame("Image Preview");
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel picLabel = new JLabel();
+        if(showFriendInSelfie)
+        {
+            picLabel.setIcon(new ImageIcon(combined));
+        }
+        else
+        {
+            picLabel.setIcon(new ImageIcon(capture));
+        }
+        JScrollPane scrollPane = new JScrollPane(picLabel);
+        JPanel insidePanel = new JPanel(new BorderLayout());
+        insidePanel.add(scrollPane);
+        panel.add(insidePanel, BorderLayout.CENTER);
+
+        preview.add(panel);
+        preview.pack();
+        preview.setSize(HomeUI.getMaxWindowBounds(preview).getSize());
+        preview.setLocation(0,0);
+        preview.setVisible(true);
+    }
+
+
     public void OpenScreenshotNotif()
     {
         notif = new JFrame("Selfie!");
 
         GridBagLayout layout = new GridBagLayout();
         JPanel panel = new JPanel(layout);
+        Point pos = home.GetHomePosition();
         notif.setSize(350,275);
+        notif.setLocation(pos);
 
-        JLabel picLabel = new JLabel(new ImageIcon(thumb));
+        JButton picLabel = new JButton(new ImageIcon(thumb));
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridy = 0;
@@ -96,7 +131,14 @@ public class Screenshot {
                 }
 
             }
+        });
+        picLabel.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent evt)
+            {
+                OpenPreview();
 
+            }
         });
         notif.getContentPane().add(panel);
         notif.setVisible(true);
@@ -129,7 +171,7 @@ public class Screenshot {
             throw new RuntimeException(e);
         }
 
-        BufferedImage overlay = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), "ShimejiMonroe/Selfie_overlay.png"));
+        BufferedImage overlay = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), Main.getInstance().getMainMascot().getImageSet() + "/ui/Selfie_overlay.png"));
         BufferedImage scaled = convertToBufferedImage(overlay.getScaledInstance(screenRect.width, screenRect.height, Image.SCALE_SMOOTH));
         if(combined  != null)
             combined.flush();

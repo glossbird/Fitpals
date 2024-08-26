@@ -1,22 +1,28 @@
 package com.group_finity.mascot.environment.home.UI;
 
 import com.group_finity.mascot.environment.home.HomeUI;
+import com.group_finity.mascot.glossbird.AlarmData;
 import com.group_finity.mascot.glossbird.AlarmManager;
 import com.group_finity.mascot.glossbird.Screenshot;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class AlarmPanel {
 
     JFrame alarmPanel;
     AlarmManager alarmManager;
-    int hour;
-    int minute;
-
-    public AlarmPanel(){
+    int hour = 12;
+    int minute = 0;
+    boolean enabled;
+    public AlarmPanel(AlarmManager manager){
         super();
+        this.alarmManager = manager;
         alarmPanel = new JFrame("Alarm");
 
         GridBagLayout layout = new GridBagLayout();
@@ -28,9 +34,48 @@ public class AlarmPanel {
         Rectangle boundsTwo = HomeUI.getMaxWindowBounds(alarmPanel);
         alarmPanel.setLocation(boundsTwo.x + boundsTwo.width - alarmPanel.getWidth(), boundsTwo.y + boundsTwo.height - alarmPanel.getHeight());
 
-        JTextField hourLabel = new JTextField("12");
+        JTextField hourLabel = new JTextField(this.hour);
+        hourLabel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                hour = Integer.parseInt(hourLabel.getText());
+            }
+        });
         JLabel colon = new JLabel(":");
-        JTextField minuteLabel = new JTextField("00");
+        JTextField minuteLabel = new JTextField(minute);
+        minuteLabel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                minute = Integer.parseInt(minuteLabel.getText());
+            }
+        });
+
+        DocumentListener dl = new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            protected void updateFieldState() {
+                FormatDateTime(hourLabel,minuteLabel);
+            }
+        };
+
+        hourLabel.getDocument().addDocumentListener(dl);
+        minuteLabel.getDocument().addDocumentListener(dl);
+
+
         JLabel AMPM = new JLabel("PM");
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -43,7 +88,27 @@ public class AlarmPanel {
         JButton minuteDown = new JButton();
 
         JButton saveButton =  new JButton("Save");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                alarmManager.Save(new AlarmData(hour,minute,enabled));
+            }
+        });
         JCheckBox enabledBox = new JCheckBox("Enable Alarm");
+        enabledBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(enabledBox.isSelected())
+                {
+                    enabled = true;
+                }
+                else
+                {
+                    enabled = false;
+                }
+
+            }
+        });
         c.gridy = 1;
         panel.add(hourLabel,c );
         c.gridx = 1;
@@ -57,12 +122,21 @@ public class AlarmPanel {
         c.gridy = 2;
         c.gridx = 0;
         panel.add(enabledBox,c);
+        c.gridx = 1;
+        c.gridy = 3;
+        panel.add(saveButton);
+
+        hour = alarmManager.GetHour();
+        minute = alarmManager.GetMinute();
 
     }
 
-    public void FormatDateTime()
+    public void FormatDateTime(JTextField hourField, JTextField minField)
     {
-
+        if(hourField.getText() != "" && hourField.getText() != null)
+            this.hour = Integer.parseInt(hourField.getText());
+        if(minField.getText() != "" && minField.getText() != null)
+            this.minute = Integer.parseInt(minField.getText());
     }
 
 

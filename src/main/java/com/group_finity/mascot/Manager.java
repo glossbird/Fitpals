@@ -263,6 +263,8 @@ public class Manager {
             for (int i = totalMascots - 1; i > 0; i--) {
                 getMascots().get(i).dispose();
             }
+            Main.getInstance().setMainMascot(getMascots().get(0));
+
         }
     }
 
@@ -279,8 +281,15 @@ public class Manager {
                     getMascots().get(i).dispose();
                 }
             }
+            Main.getInstance().setMainMascot(getMascots().get(0));
         }
     }
+
+    public void SetMain(Mascot mascot)
+    {
+        Main.getInstance().setMainMascot(mascot);
+    }
+
 
     /**
      * Dismisses mascots which use the specified image set until one mascot remains.
