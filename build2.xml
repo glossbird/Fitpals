@@ -15,7 +15,7 @@
   <manifest></manifest>
   <icon></icon>
   <jre>
-    <path>%JAVA_HOME%;%PATH%</path>
+    <path>%JAVA_HOME%;%PATH%;jre</path>
     <requiresJdk>false</requiresJdk>
     <requires64Bit>false</requires64Bit>
     <minVersion></minVersion>

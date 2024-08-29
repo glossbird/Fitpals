@@ -64,6 +64,7 @@ public class HomeUI {
         contentPane.add(homeLabel, BorderLayout.CENTER);
         contentPane.add(alarmButton);
         contentPane.add(selfie);
+        contentPane.add(trinkets);
         Rectangle boundsTwo = getMaxWindowBounds(frame);
 
         bounds = new Rectangle(100, 100, 300, 400);

@@ -7,6 +7,7 @@ import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.glossbird.AlarmManager;
+import com.group_finity.mascot.glossbird.EggManager;
 import com.group_finity.mascot.image.ImagePairs;
 import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
 import com.group_finity.mascot.sound.Sounds;
@@ -240,12 +241,14 @@ public class Main {
             createMascot(imageSet);
         }
         setAlarmManager( new AlarmManager());
+        eggMan = new EggManager();
 
         try {
             new HomeUI();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         getManager().start();
     }
     boolean mainMascotSet = false;
@@ -1040,6 +1043,7 @@ public class Main {
     }
 
     public Mascot mainMascot;
+    public EggManager eggMan;
 
     /**
      * Creates a random {@link Mascot}.

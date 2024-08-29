@@ -7,6 +7,7 @@ import com.group_finity.mascot.environment.Area;
 import com.group_finity.mascot.environment.MascotEnvironment;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
+import com.group_finity.mascot.glossbird.MascotData;
 import com.group_finity.mascot.hotspot.Hotspot;
 import com.group_finity.mascot.image.MascotImage;
 import com.group_finity.mascot.image.TranslucentWindow;
@@ -117,6 +118,8 @@ public class Mascot {
      * Mascot display environment.
      */
     private MascotEnvironment environment = new MascotEnvironment(this);
+
+    private MascotData linkedData;
 
     private String sound = null;
 
@@ -666,5 +669,13 @@ public class Mascot {
         } else {
             refreshCursor(point);
         }
+    }
+
+    public MascotData getLinkedData() {
+        return linkedData;
+    }
+
+    public void setLinkedData(MascotData linkedData) {
+        this.linkedData = linkedData;
     }
 }

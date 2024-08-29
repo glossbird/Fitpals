@@ -4,6 +4,7 @@ import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
+import com.group_finity.mascot.glossbird.EggManager;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -53,6 +54,8 @@ public class Manager {
      * If you fail to create a tray icon, the process will remain forever unless you close the program when the {@link Mascot} disappears.
      */
     private boolean exitOnLastRemoved = true;
+
+    private EggManager eggMan;
 
     /**
      * Thread that loops {@link #tick()}.
@@ -150,6 +153,11 @@ public class Manager {
         // Update the environmental information first
         NativeFactory.getInstance().getEnvironment().tick();
 
+        if(eggMan == null)
+        {
+            eggMan = Main.getInstance().eggMan;
+        }
+
         synchronized (getMascots()) {
 
             // Add the mascots which should be added
@@ -174,6 +182,8 @@ public class Manager {
                 mascot.apply();
             }
         }
+
+        eggMan.tick();
 
         if (isExitOnLastRemoved() && getMascots().isEmpty()) {
             // exitOnLastRemoved is true and there are no mascots left, so exit.

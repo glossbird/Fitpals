@@ -33,6 +33,8 @@ public class UserBehavior implements Behavior {
 
     public static final String BEHAVIOURNAME_THROWN = "Thrown";
 
+    public static final String BEHAVIOURNAME_CLICK = "Clicked";
+
     private enum HotspotState {
         INACTIVE,
         ACTIVE_NULL,
