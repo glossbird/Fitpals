@@ -4,6 +4,7 @@ import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
+import com.group_finity.mascot.glossbird.DialogueManager;
 import com.group_finity.mascot.glossbird.EggManager;
 
 import java.awt.*;
@@ -56,7 +57,7 @@ public class Manager {
     private boolean exitOnLastRemoved = true;
 
     private EggManager eggMan;
-
+    private DialogueManager diagMan;
     /**
      * Thread that loops {@link #tick()}.
      */
@@ -158,6 +159,11 @@ public class Manager {
             eggMan = Main.getInstance().eggMan;
         }
 
+        if(diagMan == null)
+        {
+            diagMan = Main.getInstance().getDiagMan();
+        }
+
         synchronized (getMascots()) {
 
             // Add the mascots which should be added
@@ -184,6 +190,7 @@ public class Manager {
         }
 
         eggMan.tick();
+        diagMan.tick();
 
         if (isExitOnLastRemoved() && getMascots().isEmpty()) {
             // exitOnLastRemoved is true and there are no mascots left, so exit.

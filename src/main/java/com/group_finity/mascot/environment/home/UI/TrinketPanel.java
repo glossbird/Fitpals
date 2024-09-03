@@ -1,6 +1,5 @@
 package com.group_finity.mascot.environment.home.UI;
 
-import com.group_finity.mascot.glossbird.AlarmManager;
 import com.group_finity.mascot.glossbird.TrinketManager;
 
 import javax.swing.*;

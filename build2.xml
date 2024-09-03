@@ -15,10 +15,10 @@
   <manifest></manifest>
   <icon></icon>
   <jre>
-    <path>%JAVA_HOME%;%PATH%;jre</path>
+    <path>jre-19.0.1;%PATH%;%JAVA_HOME%</path>
     <requiresJdk>false</requiresJdk>
     <requires64Bit>false</requires64Bit>
-    <minVersion></minVersion>
+    <minVersion>19</minVersion>
     <maxVersion></maxVersion>
     <maxHeapPercent>60</maxHeapPercent>
   </jre>

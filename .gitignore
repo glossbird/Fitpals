@@ -38,3 +38,4 @@ conf/settings.properties
 **/*.log.lck
 img/Shimeji/**
 img/KuroShimeji/**
+/jdk-22/

@@ -1,7 +1,6 @@
 package com.group_finity.mascot.environment.home;
 
 import com.group_finity.mascot.Main;
-import com.group_finity.mascot.environment.Location;
 import com.group_finity.mascot.environment.home.UI.AlarmPanel;
 import com.group_finity.mascot.glossbird.Screenshot;
 

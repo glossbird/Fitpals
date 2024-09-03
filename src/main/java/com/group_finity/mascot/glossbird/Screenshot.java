@@ -1,7 +1,6 @@
 package com.group_finity.mascot.glossbird;
 
 import com.group_finity.mascot.Main;
-import com.group_finity.mascot.environment.Border;
 import com.group_finity.mascot.environment.home.HomeUI;
 
 import javax.imageio.ImageIO;

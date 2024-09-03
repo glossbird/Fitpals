@@ -2,9 +2,7 @@ package com.group_finity.mascot.glossbird.eggs;
 
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
-import com.group_finity.mascot.behavior.UserBehavior;
 import com.group_finity.mascot.environment.MascotEnvironment;
-import com.group_finity.mascot.environment.home.HomeUI;
 import com.group_finity.mascot.glossbird.EggManager;
 
 import javax.swing.*;

@@ -7,6 +7,7 @@ import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.glossbird.AlarmManager;
+import com.group_finity.mascot.glossbird.DialogueManager;
 import com.group_finity.mascot.glossbird.EggManager;
 import com.group_finity.mascot.image.ImagePairs;
 import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
@@ -242,7 +243,8 @@ public class Main {
         }
         setAlarmManager( new AlarmManager());
         eggMan = new EggManager();
-
+        diagMan = new DialogueManager();
+        diagMan.setActiveMessage("Testing Message Over Here");
         try {
             new HomeUI();
         } catch (IOException e) {
@@ -250,6 +252,8 @@ public class Main {
         }
 
         getManager().start();
+        diagMan.OpenTextbox();
+
     }
     boolean mainMascotSet = false;
 
@@ -261,6 +265,15 @@ public class Main {
         this.alarmManager = alarmManager;
     }
 
+    public DialogueManager getDiagMan() {
+        return diagMan;
+    }
+
+    public void setDiagMan(DialogueManager diagMan) {
+        this.diagMan = diagMan;
+    }
+
+    DialogueManager diagMan;
     AlarmManager alarmManager;
     /**
      * Loads the configuration files for the given image set.
@@ -361,6 +374,11 @@ public class Main {
                 behaviorsFile = filePath.resolve("two.xml");
             } else if (Files.exists(filePath.resolve("2.xml"))) {
                 behaviorsFile = filePath.resolve("2.xml");
+            }
+
+            filePath = IMAGE_DIRECTORY.resolve(imageSet);
+            if (Files.exists(filePath.resolve("PalBehavior.xml"))) {
+                behaviorsFile = filePath.resolve("PalBehavior.xml");
             }
 
             log.log(Level.INFO, "Reading behavior file \"{0}\" for image set \"{1}\"", new Object[]{behaviorsFile, imageSet});
