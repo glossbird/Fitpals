@@ -31,6 +31,10 @@ public class DialogueManager {
 
     public void OpenTextbox()
     {
+        if(active)
+        {
+            messageBox.setVisible(false);
+        }
         messageBox = new JFrame();
         visibleText = new JLabel("");
         visibleText.setForeground(Color.black);
@@ -57,8 +61,25 @@ public class DialogueManager {
     void FollowMascot()
     {
         Point location = Main.getInstance().getMainMascot().getBounds().getLocation();
-        location.x += 50;
-        location.y -= 100;
+
+        System.out.println("loc is " + location+", and right is " + Main.getInstance().getMainMascot().getEnvironment().getScreen().getTop());
+        if(Main.getInstance().getMainMascot().getEnvironment().getScreen().getRight() - location.x < 350)
+        {
+            location.x -= 250;
+        }
+        else
+        {
+            location.x += 50;
+        }
+
+        if(Math.abs(Main.getInstance().getMainMascot().getEnvironment().getScreen().getTop()+640 - location.y) < 100)
+        {
+            location.y += 100;
+        }
+        else
+        {
+            location.y -= 100;
+        }
         messageBox.setLocation(location);
     }
 
