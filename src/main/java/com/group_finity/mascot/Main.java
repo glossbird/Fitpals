@@ -14,6 +14,12 @@ import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
 import com.group_finity.mascot.sound.Sounds;
 import com.nilo.plaf.nimrod.NimRODLookAndFeel;
 import com.nilo.plaf.nimrod.NimRODTheme;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinUser;
+import com.sun.jna.win32.StdCallLibrary;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -244,7 +250,6 @@ public class Main {
         setAlarmManager( new AlarmManager());
         eggMan = new EggManager();
         diagMan = new DialogueManager();
-        diagMan.setActiveMessage("Testing Message Over Here");
         try {
             new HomeUI();
         } catch (IOException e) {
@@ -252,8 +257,7 @@ public class Main {
         }
 
         getManager().start();
-        diagMan.OpenTextbox();
-
+        diagMan.setActiveMessage("Testing Message Over Here");
     }
     boolean mainMascotSet = false;
 
@@ -275,6 +279,50 @@ public class Main {
 
     DialogueManager diagMan;
     AlarmManager alarmManager;
+
+    public static boolean isAppInFullScreen()
+    {
+        WinDef.HWND foregroundWindow = User32.INSTANCE.GetForegroundWindow();
+        WinDef.RECT foregroundRectangle = new WinDef.RECT();
+        WinDef.RECT desktopWindowRectangle = new WinDef.RECT();
+        User32.INSTANCE.GetWindowRect( foregroundWindow, foregroundRectangle );
+        WinDef.HWND desktopWindow = User32.INSTANCE.GetDesktopWindow();
+        User32.INSTANCE.GetWindowRect( desktopWindow, desktopWindowRectangle );
+        return foregroundRectangle.toString().equals( desktopWindowRectangle.toString() );
+    }
+    public static interface User32 extends StdCallLibrary {
+        User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class);
+
+        interface WNDENUMPROC extends StdCallCallback {
+            boolean callback(Pointer hWnd, Pointer arg);
+        }
+
+        boolean EnumWindows(WNDENUMPROC lpEnumFunc, Pointer userData);
+        int GetWindowTextA(Pointer hWnd, byte[] lpString, int nMaxCount);
+        WinDef.HWND GetForegroundWindow();
+        WinDef.HWND GetWindowRect(WinDef.HWND window, WinDef.RECT rect);
+        WinDef.HWND GetDesktopWindow();
+
+        Pointer GetWindow(Pointer hWnd, int uCmd);
+    }
+
+
+    public String fullscreenAppName()
+    {
+        if(!isAppInFullScreen())
+        {
+            return "";
+        }
+        WinDef.HWND foregroundWindow = User32.INSTANCE.GetForegroundWindow();
+        byte[] windowText = new byte[512];
+        User32.INSTANCE.GetWindowTextA(foregroundWindow.getPointer(), windowText, 512);
+        String wText = Native.toString(windowText).trim();
+
+        return wText;
+    }
+
+
+
     /**
      * Loads the configuration files for the given image set.
      *
@@ -357,6 +405,11 @@ public class Main {
                 behaviorsFile = filePath.resolve("2.xml");
             }
 
+            filePath = IMAGE_DIRECTORY.resolve(imageSet);
+            if (Files.exists(filePath.resolve("PalBehavior.xml"))) {
+                behaviorsFile = filePath.resolve("PalBehavior.xml");
+            }
+
             filePath = IMAGE_DIRECTORY.resolve(imageSet).resolve(CONFIG_DIRECTORY);
             if (Files.exists(filePath.resolve("behaviors.xml"))) {
                 behaviorsFile = filePath.resolve("behaviors.xml");
@@ -376,10 +429,7 @@ public class Main {
                 behaviorsFile = filePath.resolve("2.xml");
             }
 
-            filePath = IMAGE_DIRECTORY.resolve(imageSet);
-            if (Files.exists(filePath.resolve("PalBehavior.xml"))) {
-                behaviorsFile = filePath.resolve("PalBehavior.xml");
-            }
+
 
             log.log(Level.INFO, "Reading behavior file \"{0}\" for image set \"{1}\"", new Object[]{behaviorsFile, imageSet});
 
@@ -1086,6 +1136,10 @@ public class Main {
         {
             setMainMascot(mascot);
             mainMascotSet = true;
+        }
+        else if(Objects.equals(getMainMascot().getImageSet(), imageSet))
+        {
+            return;
         }
         // Create it outside the bounds of the screen
         mascot.setAnchor(new Point(-4000, -4000));

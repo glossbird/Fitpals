@@ -1,7 +1,7 @@
 {
   "alarmData" : {
-    "hour" : 44,
+    "hour" : 33,
     "minute" : 0,
-    "enabled" : false
+    "enabled" : true
   }
 }

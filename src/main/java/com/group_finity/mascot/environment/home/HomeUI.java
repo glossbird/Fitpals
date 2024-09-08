@@ -2,6 +2,7 @@ package com.group_finity.mascot.environment.home;
 
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.environment.home.UI.AlarmPanel;
+import com.group_finity.mascot.environment.home.UI.CustomTitlebar;
 import com.group_finity.mascot.glossbird.Screenshot;
 
 import javax.imageio.ImageIO;
@@ -27,7 +28,7 @@ public class HomeUI {
 
     public HomeUI() throws IOException {
         super();
-        JFrame frame = new JFrame("Home");
+        JFrame frame =  new CustomTitlebar();
         Container contentPane = frame.getContentPane();
       //  contentPane.setLayout(new FlowLayout());
 
@@ -80,12 +81,14 @@ public class HomeUI {
                 System.exit(0);
             }
         });
-
+        CustomTitlebar customBar ;
         BackgroundPanel backPanel = new BackgroundPanel(homeImg, BackgroundPanel.SCALED,0,0);
         backPanel.setTransparentAdd(false);
         GridBagConstraints c = new GridBagConstraints();
 
         backPanel.setLayout(null);
+
+
         backPanel.add(homeLabel);
         backPanel.add(alarmButton);
         backPanel.add(selfie);
@@ -102,7 +105,7 @@ public class HomeUI {
         frame.setBounds(bounds);
         loc = new Point((boundsTwo.x + boundsTwo.width - frame.getWidth()),boundsTwo.y + boundsTwo.height - frame.getHeight());
         frame.setLocation(loc);
-        frame.setUndecorated(true);
+        //frame.setUndecorated(true);
         panel.setLocation(frame.getBounds().getLocation());
         panel.setSize(frame.getSize());
 

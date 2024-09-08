@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Mascot xmlns="http://www.group-finity.com/Mascot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.group-finity.com/Mascot ../../conf/Mascot.xsd">
+        xsi:schemaLocation="http://www.group-finity.com/Mascot ../../../conf/Mascot.xsd">
 
     <BehaviorList>
         <!-- ALWAYS REQUIRED -->
@@ -35,6 +35,10 @@
 
         <Behavior Name="PullUp" Frequency="0"/>
         <Behavior Name="Divided" Frequency="0"/>
+
+        <!-- Alarm -->
+        <Behavior Name ="Alarm" Frequency="0" Hidden="true"/>
+        <Behavior Name ="AlarmRing" Frequency="0" Hidden="true"/>
 
         <!-- On the Floor -->
         <Condition Condition="#{mascot.environment.floor.isOn(mascot.anchor)}">

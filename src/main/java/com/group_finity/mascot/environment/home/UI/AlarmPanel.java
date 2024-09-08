@@ -33,7 +33,7 @@ public class AlarmPanel {
         Rectangle boundsTwo = HomeUI.getMaxWindowBounds(alarmPanel);
         alarmPanel.setLocation(boundsTwo.x + boundsTwo.width - alarmPanel.getWidth(), boundsTwo.y + boundsTwo.height - alarmPanel.getHeight());
 
-        JTextField hourLabel = new JTextField(this.hour);
+        JFormattedTextField hourLabel = new JFormattedTextField(this.hour);
         hourLabel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,7 +41,7 @@ public class AlarmPanel {
             }
         });
         JLabel colon = new JLabel(":");
-        JTextField minuteLabel = new JTextField(minute);
+        JFormattedTextField minuteLabel = new JFormattedTextField(minute);
         minuteLabel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
