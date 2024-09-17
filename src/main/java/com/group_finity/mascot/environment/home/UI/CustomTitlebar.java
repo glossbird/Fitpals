@@ -1,5 +1,7 @@
 package com.group_finity.mascot.environment.home.UI;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -22,7 +24,9 @@ public class CustomTitlebar extends JFrame
         // Custom look and feel
         try
         {
-            UIManager.setLookAndFeel("com.nilo.plaf.nimrod.NimRODLookAndFeel");
+            UIManager.setLookAndFeel(new FlatLightLaf() );
+
+
         }catch(Exception e){}
 
         setTitle("DOGEEZ");
@@ -111,8 +115,8 @@ public class CustomTitlebar extends JFrame
         });
 
         // Set the menu bar
-        setJMenuBar(mb);
-
+        //setJMenuBar(mb);
+        this.add(mb, BorderLayout.SOUTH);
         // Set size, visibility,shape and center it
         setSize(400,400);
         setVisible(true);

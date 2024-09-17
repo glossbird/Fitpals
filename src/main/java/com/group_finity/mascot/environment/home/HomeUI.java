@@ -27,6 +27,8 @@ public class HomeUI {
     public HomeUI() throws IOException {
         super();
          frame =  new CustomTitlebar();
+
+        // frame.setUndecorated(true);
         Container contentPane = frame.getContentPane();
       //  contentPane.setLayout(new FlowLayout());
 
@@ -39,7 +41,7 @@ public class HomeUI {
         BufferedImage selfieImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), Main.getInstance().getMainMascot().getImageSet() + "/ui/selfie.png"));
         selfie.setIcon(new ImageIcon(selfieImg));
         JLabel homeImage = new JLabel();
-        BufferedImage homeImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(),  "home.jpg"));
+        BufferedImage homeImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(),  "House_Menu.png"));
         homeImage.setIcon(new ImageIcon(homeImg));
         alarmButton.setSize(200,100);
         selfie.setSize(100,100);
@@ -118,7 +120,11 @@ public class HomeUI {
 
         backPanel.add(trinkets);
 
-        frame.add(backPanel);
+        contentPane.add(backPanel);
+        backPanel.setOpaque(false);
+        frame.getContentPane().setBackground(new Color(0,0,0,0f));
+        frame.setBackground(new Color(0,0,0,0f));
+
         //contentPane.add(panel);
 
         Rectangle boundsTwo = getMaxWindowBounds(frame);
