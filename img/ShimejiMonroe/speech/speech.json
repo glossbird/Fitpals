@@ -1,0 +1,66 @@
+{
+  "greeting" : {
+    "speechList": [{
+
+        "dialogue": "Helloooo!",
+        "condition": "greeting",
+        "audio_id": 1
+
+    }]
+  },
+  "reminder" : {
+    "speechList": [{
+        "dialogue": "Attention! Reminder time!!",
+        "condition": "reminder",
+        "audio_id": 1
+    }]
+  },
+  "internet" : {
+    "speechList": [{
+        "dialogue": "Lots of internet for today, huh?",
+        "condition": "internet",
+        "altCondition": "runtime",
+        "conditionNumber": 45,
+        "audio_id": 1
+
+    }]
+  },
+  "discord" : {
+    "speechList": [
+      {
+        "dialogue": "Who ya talkin' to?",
+        "condition": "discord",
+        "altCondition": "open",
+        "audio_id": -1
+      },
+      {
+        "dialogue": "Enough people-time, recharge your social battery!",
+        "condition": "discord",
+        "altCondition": "close",
+        "audio_id": -1
+      },
+      {
+        "dialogue": "Wow, y'all are some chatty kathys!",
+        "condition": "discord",
+        "altCondition": "runtime",
+        "conditionNumber": 600,
+        "audio_id": -1
+      }]
+  },
+  "fortnite" : {
+    "speechList" : [
+      {
+        "dialogue": "Let's get this W!",
+        "condition": "fortnite",
+        "altCondition": "open",
+        "audio_id": -1
+      },
+      {
+        "dialogue": "Did ya win, son?",
+        "condition": "fortnite",
+        "altCondition": "close",
+        "audio_id": -1
+      }
+    ]
+  }
+}

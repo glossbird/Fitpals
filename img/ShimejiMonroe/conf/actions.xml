@@ -45,7 +45,7 @@
 
         <Action Name="Sit" Type="Stay" BorderType="Floor">
             <Animation>
-                <Pose Image="/shime11.png" ImageAnchor="64,110" Velocity="0,0" Duration="250"/>
+                <Pose Image="/shime11.png" ImageAnchor="64,128" Velocity="0,0" Duration="250"/>
             </Animation>
         </Action>
 
@@ -755,8 +755,8 @@
                 <ActionReference Name="Falling"/>
                 <ActionReference Name="Bouncing"/>
             </Action>
-                <ActionReference Name="SitAndLookAtMouse" Duration="${10+Math.random()*10}"/>
-                <ActionReference Name="AlarmRing"/>
+            <ActionReference Name="SitAndLookAtMouse" Duration="${10+Math.random()*10}"/>
+            <ActionReference Name="AlarmRing"/>
 
         </Action>
 
@@ -771,6 +771,21 @@
                 <Pose Image="/shime47.png" ImageAnchor="64,128" Velocity="-2,0" Duration="6"/>
                 <Pose Image="/shime48.png" ImageAnchor="64,128" Velocity="2,0" Duration="6"/>
             </Animation>
+        </Action>
+
+        <!-- Home -->
+        <Action Name="Go Home" Type="Sequence" Loop="false">
+            <ActionReference Name="Run"
+                             TargetX="${mascot.environment.getDoorCoords()}" />
+            <ActionReference Name="SitDown"/>
+        </Action>
+        <!-- Home -->
+        <Action Name="LeaveHome" Type="Sequence">
+            <Action Type="Sequence" Condition="${!mascot.environment.floor.isOn(mascot.anchor)}">
+
+                <ActionReference Name="Walk"
+                                 TargetX="${mascot.environment.getDoorCoords()}"/>
+            </Action>
         </Action>
 
     </ActionList>

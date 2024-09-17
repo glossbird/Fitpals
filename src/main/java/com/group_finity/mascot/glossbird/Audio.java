@@ -2,6 +2,7 @@ package com.group_finity.mascot.glossbird;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.GainProcessor;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import be.tarsos.dsp.io.jvm.AudioPlayer;
 import com.group_finity.mascot.Main;
@@ -11,6 +12,7 @@ import javax.sound.sampled.LineUnavailableException;
 public class Audio implements Runnable{
 
     public String file;
+    AudioDispatcher adp;
     public void run() {
         playSound(file);
     }
@@ -25,12 +27,14 @@ public class Audio implements Runnable{
     {
 
     }
-
+    public void Stop()
+    {
+        adp.stop();
+    }
 
     private void playSound(String file)
     {
         String imageSet = String.valueOf(Main.IMAGE_DIRECTORY.resolve(Main.getInstance().mainMascot.getImageSet()).resolve("sounds"));
-        AudioDispatcher adp;
         imageSet+= "\\" + file + ".mp3";
 
         try {
@@ -45,8 +49,16 @@ public class Audio implements Runnable{
             throw new RuntimeException(e);
         }
 
+        final AudioProcessor gain;
+        try {
+            gain = new GainProcessor(.6);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         try {
             adp.addAudioProcessor(playerProcessor);
+            adp.addAudioProcessor(gain);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -3,6 +3,7 @@ package com.group_finity.mascot.environment;
 import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.NativeFactory;
+import com.group_finity.mascot.environment.home.HomeUI;
 
 import java.awt.*;
 
@@ -12,7 +13,7 @@ import java.awt.*;
  */
 public class MascotEnvironment {
     private final Environment impl;
-
+    private HomeUI home = Main.getInstance().getHome();
     private final Mascot mascot;
 
     private Area currentWorkArea;
@@ -20,8 +21,12 @@ public class MascotEnvironment {
     public MascotEnvironment(Mascot mascot) {
         this.mascot = mascot;
         impl = NativeFactory.getInstance().getEnvironment();
+        home = Main.getInstance().getHome();
         impl.init();
     }
+
+    public double getHomeCoords() {return Main.getInstance().getHome().GetHomePosition().x;};
+    public double getDoorCoords() {return Main.getInstance().getHome().GetDoorPosition().x;};
 
     /**
      * Gets the screen containing this environment's {@link Mascot}.

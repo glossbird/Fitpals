@@ -232,6 +232,7 @@ public class Main {
 
 
 
+        diagMan = new DialogueManager();
 
         // Create mascots
         for (String imageSet : imageSets) {
@@ -249,16 +250,24 @@ public class Main {
         }
         setAlarmManager( new AlarmManager());
         eggMan = new EggManager();
-        diagMan = new DialogueManager();
         try {
-            new HomeUI();
+            home = new HomeUI();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         getManager().start();
-        diagMan.setActiveMessage("Testing Message Over Here");
+        diagMan.SetMainMascot(this.getMainMascot());
+        //diagMan.safeSetActiveMessage("HFDJHILDFKGjkd long long long Long long long long Long long long long Long long long long Long long long long ");
     }
+
+    HomeUI home;
+
+    public HomeUI getHome() {
+        return home;
+    }
+
+
     boolean mainMascotSet = false;
 
     public AlarmManager getAlarmManager() {
@@ -1108,6 +1117,8 @@ public class Main {
 
     public void setMainMascot(Mascot mainMascot) {
         this.mainMascot = mainMascot;
+        if(this.diagMan != null)
+         this.diagMan.SetMainMascot(mainMascot);
     }
 
     public Mascot mainMascot;

@@ -301,8 +301,8 @@ public class Mascot {
         });
 
         // "Another One!" menu item
-        final JMenuItem increaseMenu = new JMenuItem(languageBundle.getString("CallAnother"));
-        increaseMenu.addActionListener(event -> Main.getInstance().createMascot(imageSet));
+       // final JMenuItem increaseMenu = new JMenuItem(languageBundle.getString("CallAnother"));
+       // increaseMenu.addActionListener(event -> Main.getInstance().createMascot(imageSet));
 
         // "Bye Bye!" menu item
         final JMenuItem disposeMenu = new JMenuItem(languageBundle.getString("Dismiss"));
@@ -390,7 +390,7 @@ public class Mascot {
         MenuScroller.setScrollerFor(submenu, 30, 125);
         MenuScroller.setScrollerFor(allowedSubmenu, 30, 125);
 
-        popup.add(increaseMenu);
+        //popup.add(increaseMenu);
         popup.addSeparator();
         popup.add(gatherMenu);
         popup.add(restoreMenu);

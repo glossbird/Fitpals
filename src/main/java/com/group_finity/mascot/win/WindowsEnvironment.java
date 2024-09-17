@@ -76,13 +76,13 @@ class WindowsEnvironment extends Environment {
         for (String windowTitle : windowTitles) {
             if (!windowTitle.trim().isEmpty() && ieTitle.contains(windowTitle)) {
                 // Window is IE
-                ieCache.put(hWnd, true);
+                ieCache.put(hWnd, false);
                 return true;
             }
         }
 
         // Window is not IE
-        ieCache.put(hWnd, false);
+        ieCache.put(hWnd, true);
         return false;
     }
 

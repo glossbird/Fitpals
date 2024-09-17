@@ -22,7 +22,7 @@ public class CustomTitlebar extends JFrame
         // Custom look and feel
         try
         {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            UIManager.setLookAndFeel("com.nilo.plaf.nimrod.NimRODLookAndFeel");
         }catch(Exception e){}
 
         setTitle("DOGEEZ");

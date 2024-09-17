@@ -4,6 +4,7 @@ import com.group_finity.mascot.environment.Area;
 
 public class HomeArea extends Area {
 
+
     HomeUI linked_UI;
     public HomeArea(HomeUI UI)
     {

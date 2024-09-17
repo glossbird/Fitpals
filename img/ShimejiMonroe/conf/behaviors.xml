@@ -40,6 +40,10 @@
         <Behavior Name ="Alarm" Frequency="0" Hidden="true"/>
         <Behavior Name ="AlarmRing" Frequency="0" Hidden="true"/>
 
+        <!-- Home -->
+        <Behavior Name ="Go Home" Frequency="0" Hidden="false"/>
+        <Behavior Name ="LeaveHome" Frequency="0" Hidden="true"/>
+
         <!-- On the Floor -->
         <Condition Condition="#{mascot.environment.floor.isOn(mascot.anchor)}">
             <Behavior Name="StandUp" Frequency="200"/>

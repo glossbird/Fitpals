@@ -7,11 +7,9 @@ import com.group_finity.mascot.glossbird.Screenshot;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +23,10 @@ public class HomeUI {
     AlarmPanel alarmPanel;
     Screenshot screenshot;
     Point loc;
-
+    JFrame frame;
     public HomeUI() throws IOException {
         super();
-        JFrame frame =  new CustomTitlebar();
+         frame =  new CustomTitlebar();
         Container contentPane = frame.getContentPane();
       //  contentPane.setLayout(new FlowLayout());
 
@@ -81,6 +79,17 @@ public class HomeUI {
                 System.exit(0);
             }
         });
+        frame.addMouseMotionListener(new MouseAdapter(){
+            public void mouseDragged(MouseEvent me)
+            {
+                // Set the location
+                // get the current location x-co-ordinate and then get
+                // the current drag x co-ordinate, add them and subtract most recent
+                // mouse pressed x co-ordinate
+                // do same for y co-ordinate
+                loc = frame.getLocation();
+            }
+        });
         CustomTitlebar customBar ;
         BackgroundPanel backPanel = new BackgroundPanel(homeImg, BackgroundPanel.SCALED,0,0);
         backPanel.setTransparentAdd(false);
@@ -88,12 +97,25 @@ public class HomeUI {
 
         backPanel.setLayout(null);
 
-
+        JButton door = new JButton();
+        //door.setOpaque(true);
+        door.setContentAreaFilled(false);
+        door.setBorderPainted(true);
+        door.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.RED, Color.black));
+        backPanel.add(door);
         backPanel.add(homeLabel);
         backPanel.add(alarmButton);
         backPanel.add(selfie);
-        alarmButton.setBounds(80,175,60,60);
-        selfie.setBounds(255,175,60,60);
+        alarmButton.setBounds(80,160,60,60);
+        selfie.setBounds(255,160,60,60);
+        door.setBounds(168, 250, 75, 140);
+        door.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.getInstance().getManager().setBehaviorAll("GoHome");
+            }
+        });
+
         backPanel.add(trinkets);
 
         frame.add(backPanel);
@@ -139,6 +161,15 @@ public class HomeUI {
     public Point GetHomePosition()
     {
         return loc;
+    }
+
+    public Point  GetDoorPosition()
+    {
+        Point test =  new Point();
+        test.x = (int) frame.getBounds().getCenterX();
+        test.y = 0;
+        System.out.println("Home loc is " + test);
+        return test;
     }
 
 

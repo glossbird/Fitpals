@@ -34,11 +34,12 @@ public class AudioManager {
 
     AudioDispatcher adp = null;
 
-    public void playSound(String soundName)
+    public Audio playSound(String soundName)
     {
 
        Audio play = new Audio();
-       play.Play("ticksound");
+       play.Play(soundName);
+       return play;
 
     }
     void ManualLoad(String path)

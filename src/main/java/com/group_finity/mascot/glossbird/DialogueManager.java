@@ -1,22 +1,40 @@
 package com.group_finity.mascot.glossbird;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group_finity.mascot.Main;
+import com.group_finity.mascot.Mascot;
+import org.jdesktop.swingx.JXLabel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DialogueManager {
 
     String activeMessage;
     int textPosition;
-    JLabel visibleText;
-    JLabel invisibleText;
     JFrame messageBox;
     boolean active;
     boolean stopCurrentMessage;
     float openTime;
+
+    boolean typewriterSound;
+    boolean fullscreen;
+    Mascot mainMascot;
+    Map<String, SpeechList> speechMap = new HashMap<String,SpeechList>();
+
+    LinkedList<String> previousSpeech;
+
+    int TalkSpeed = 3;
     public DialogueManager()
     {
         super();
@@ -24,53 +42,248 @@ public class DialogueManager {
         textPosition = 0;
         active = false;
         stopCurrentMessage = false;
+        previousSpeech = new LinkedList<String>();
+        for(int i = 0; i < 5; i++)
+        {
+            previousSpeech.add("");
+        }
     }
 
     public String getActiveMessage() {
         return activeMessage;
     }
+    public List<String> allConditions()
+    {
+        if(speechMap == null)
+        {
+            return null;
+        }
+        return (List<String>) this.speechMap.keySet();
+    }
+
+    public boolean isTypewriterSound() {
+        return typewriterSound;
+    }
+
+    public void setTypewriterSound(boolean typewriterSound) {
+        this.typewriterSound = typewriterSound;
+    }
+
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    public void setFullscreen(boolean fullscreen) {
+        this.fullscreen = fullscreen;
+    }
+
+    public void SetMainMascot(Mascot main)
+    {
+        this.mainMascot = main;
+        try {
+            LoadSpeechMessages();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void LoadSpeechMessages() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File path = new File(Main.IMAGE_DIRECTORY + "/" + mainMascot.getImageSet() + "/speech/speech.json");
+        Map<String, SpeechList> result =  objectMapper.readValue(path, new TypeReference<Map<String, SpeechList>>() {
+        });
+        this.speechMap = result;
+    }
+
+    public List<Speech> SortSpeechListByCondition(List<Speech> speechList)
+    {
+        speechList.removeIf(speech -> speech.getConditionNumber() < 0);
+        speechList.sort(Comparator.comparingInt(Speech::getConditionNumber).reversed());
+        return  speechList;
+    }
+
+    public List<Speech> GetAllSpeechWithCondition(String id, String condition)
+    {
+        SpeechList literalList  = speechMap.get(id);
+        if(literalList == null)
+        {
+            return  null;
+        }
+        List<Speech> speechList = literalList.speechList;
+
+        List<Speech> newList = new ArrayList<>();
+        for(Speech speech : speechList)
+        {
+            if(speech.getAltCondition().equals(condition))
+            {
+                newList.add(speech);
+            }
+        }
+
+        return  newList;
+    }
+
+
+
+    public Speech LoadMessageOfCondition(String condition)
+    {
+        SpeechList literalList  = speechMap.get(condition);
+        if(literalList == null)
+        {
+            return  null;
+        }
+        List<Speech> speechList = literalList.speechList;
+        int random = (int) (Math.random() * (speechList.size()));
+        return speechList.get(random);
+    }
+
+    public Speech GetSpeechFromCondition(String id, String condition)
+    {
+        SpeechList literalList  = speechMap.get(id);
+        if(literalList == null)
+        {
+            return  null;
+        }
+        List<Speech> speechList = literalList.speechList;
+        List<Speech> subList = new ArrayList<>();
+        Speech toReturn = null;
+        for(Speech speech : speechList)
+        {
+            if(speech.getAltCondition().equals(condition))
+            {
+                subList.add(speech);
+            }
+        }
+        if(subList.size() > 1)
+        {
+            int random = (int) (Math.random() * (subList.size()));
+            toReturn = subList.get(random);
+        }
+        else if(!subList.isEmpty()) {
+            toReturn = subList.get(0);
+        }
+
+        return  toReturn;
+
+    }
+
+
+    public void EasterEggTrigger(String id, String condition)
+    {
+        System.out.println("Triggering easter egg for " + id + " doing " + condition);
+
+        if(Objects.equals(condition, ""))
+        {
+            PlayRandomSpeech(id);
+        }
+        else
+        {
+            SpeechList literalList  = speechMap.get(id);
+            if(literalList == null)
+            {
+                return;
+            }
+            List<Speech> speechList = literalList.speechList;
+            List<Speech> subList = new ArrayList<>();
+            for(Speech speech : speechList)
+            {
+                if(speech.getAltCondition().equals(condition))
+                {
+                    subList.add(speech);
+                }
+            }
+            int random = (int) (Math.random() * (subList.size()));
+            PlaySpeech(subList.get(random));
+        }
+
+
+    }
+
+    public void PlayRandomSpeech(String speechID)
+    {
+        Speech toSay = LoadMessageOfCondition(speechID);
+        PlaySpeech(toSay);
+
+    }
+
+
+
+    public void PlaySpeech(Speech speech)
+    {
+        if(speech == null)
+        {
+            System.out.println("Can't play null speech.");
+            return;
+        }
+        safeSetActiveMessage(speech.dialogue);
+        if(speech.audio_id != -1)
+        {
+            typewriterSound = false;
+            AudioManager.getInstance().playSound(speech.condition+"_"+speech.audio_id);
+        }
+        else
+        {
+            typewriterSound = true;
+        }
+    }
 
     public void safeSetActiveMessage(String activeMessage)
     {
+       // activeMessage =  formatText(activeMessage);
         if(Objects.equals(this.activeMessage, activeMessage))
         {
             return;
         }
+        if(previousSpeech.contains(activeMessage))
+        {
+            return;
+        }
+        if(activeMessage.length() > 50)
+        {
+            TalkSpeed = 1;
+        }
+        else if (activeMessage.length() > 25)
+        {
+            TalkSpeed = 2;
+        }
+        else
+        {
+            TalkSpeed = 3;
+        }
         setActiveMessage(activeMessage);
     }
 
-
     public void setActiveMessage(String activeMessage) {
+        typewriterSound = true;
         this.activeMessage = activeMessage;
+        previousSpeech.removeFirst();
+        previousSpeech.add(activeMessage);
         position = 0;
         openTime = 0;
         OpenTextbox();
     }
-
+    JXLabel label;
     public void StartTextbox()
     {
         messageBox = new JFrame();
-        messageBox.setType(javax.swing.JFrame.Type.UTILITY);
-
-        visibleText = new JLabel("");
-        visibleText.setForeground(Color.black);
-        invisibleText = new JLabel(activeMessage);
-        invisibleText.setForeground(new Color(0,0,0,0));
-        JPanel popupPanel = new JPanel(new GridLayout(2,1));
-        popupPanel.add(visibleText,0);
-        popupPanel.add(invisibleText,1);
+        messageBox.setType(JFrame.Type.UTILITY);
+        messageBox.setAlwaysOnTop(true);
+        JPanel popupPanel = new JPanel(new FlowLayout());
         messageBox.setLocation(Main.getInstance().getMainMascot().getAnchor());
-        messageBox.setSize(300,200);
+        messageBox.setSize(500,200);
         messageBox.add(popupPanel);
         messageBox.setUndecorated(true);
-
+        label = new JXLabel(activeMessage);
+        label.setFont(new Font("Courier", Font.BOLD,20));
+        label.setLineWrap(true);
+        label.setMaxLineSpan(250);
+        label.setTextAlignment(JXLabel.TextAlignment.CENTER);
+        popupPanel.add(label);
+        Dimension dim = label.getPreferredSize();
+        dim.setSize(dim.getWidth()+30, dim.getHeight()+15);
+        messageBox.setSize(dim);
+        label.setText("");
         messageBox.setVisible(true);
         active = true;
-        if(!stopCurrentMessage)
-        {
-            //Typewriter(activeMessage);
-
-        }
     }
 
     public void OpenTextbox()
@@ -99,7 +312,7 @@ public class DialogueManager {
         {
             FollowMascot();
             typeNumb++;
-            if(typeNumb == 3)
+            if(typeNumb == TalkSpeed)
             {
                 typeNumb = 0;
                 TypewriterInstance();
@@ -107,7 +320,7 @@ public class DialogueManager {
         }
         else
         {
-            if(messageBox.isVisible())
+            if(messageBox != null && messageBox.isVisible())
             {
                 openTime += .1f;
                 if(openTime > 5f)
@@ -120,7 +333,9 @@ public class DialogueManager {
 
     void CloseMessage()
     {
-        messageBox.dispatchEvent(new WindowEvent(messageBox, WindowEvent.WINDOW_CLOSING));
+        //messageBox.dispatchEvent(new WindowEvent(messageBox, WindowEvent.WINDOW_CLOSING));
+        messageBox.dispose();
+        label = null;
         stopCurrentMessage = false;
         active = false;
     }
@@ -128,8 +343,8 @@ public class DialogueManager {
 
     void FollowMascot()
     {
-        Point location = Main.getInstance().getMainMascot().getBounds().getLocation();
-        if(Main.getInstance().getMainMascot().getEnvironment().getScreen().getRight() - location.x < 350)
+        Point location = mainMascot.getBounds().getLocation();
+        if(mainMascot.getEnvironment().getScreen().getRight() - location.x < 350)
         {
             location.x -= 250;
         }
@@ -138,7 +353,7 @@ public class DialogueManager {
             location.x += 50;
         }
 
-        if(Math.abs(Main.getInstance().getMainMascot().getEnvironment().getScreen().getTop()+640 - location.y) < 100)
+        if(Math.abs(mainMascot.getEnvironment().getScreen().getTop()+640 - location.y) < 100)
         {
             location.y += 100;
         }
@@ -165,43 +380,11 @@ public class DialogueManager {
             active = false;
             return;
         }
-        AudioManager.getInstance().playSound("ticksound");
         tempMessage = activeMessage.substring(0, position);
-        secretMessage = activeMessage.substring(position);
-        visibleText.setText(tempMessage);
-        invisibleText.setText(secretMessage);
+        messageBox.toFront();
+        label.setText(tempMessage);
         position++;
-
+        if(typewriterSound)
+            AudioManager.getInstance().playSound("ticksound");
     }
-
-    public void Typewriter(String message)
-    {
-        String tempMessage = "";
-        String secretMessage = message;
-        for(int i = 1; i < message.length()+1; i++)
-        {
-            if(stopCurrentMessage)
-            {
-                i = message.length()+1;
-                CloseMessage();
-                StartTextbox();
-                return;
-            }
-            tempMessage = message.substring(0, i);
-            System.out.println(tempMessage);
-            secretMessage = message.substring(i);
-            visibleText.setText(tempMessage);
-            invisibleText.setText(secretMessage);
-            //Play Sound
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        active = false;
-
-    }
-
-
 }

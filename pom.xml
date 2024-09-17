@@ -42,18 +42,6 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>be.tarsos.dsp</groupId>
-            <artifactId>core</artifactId>
-            <version>2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>be.tarsos.dsp</groupId>
-            <artifactId>jvm</artifactId>
-            <version>2.5</version>
-        </dependency>
-
-
-        <dependency>
             <!-- AbsoluteLayout -->
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
@@ -135,6 +123,28 @@
             <artifactId>jlayer</artifactId>
             <version>1.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>be.tarsos.dsp</groupId>
+            <artifactId>core</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>be.tarsos.dsp</groupId>
+            <artifactId>jvm</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.12.7</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.swinglabs/swingx -->
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
     </dependencies>
 
 
@@ -283,7 +293,7 @@
                             </singleInstance>
                             <jre>
                                 <path>jdk-22;%PATH%;%JAVA_HOME%</path>
-                                <requiresJdk>false</requiresJdk>
+                                <requiresJdk>true</requiresJdk>
                                 <requires64Bit>false</requires64Bit>
                                 <minVersion>19</minVersion>
                                 <maxHeapPercent>60</maxHeapPercent>

@@ -19,6 +19,7 @@ public class AlarmPanel {
     int hour = 12;
     int minute = 0;
     boolean enabled;
+    boolean AM = false;
     public AlarmPanel(AlarmManager manager){
         super();
         this.alarmManager = manager;
@@ -86,11 +87,27 @@ public class AlarmPanel {
         JButton minuteUp = new JButton();
         JButton minuteDown = new JButton();
 
+
         JButton saveButton =  new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 alarmManager.Save(new AlarmData(hour,minute,enabled));
+            }
+        });
+        JCheckBox amBox = new JCheckBox("AM/PM");
+        amBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(amBox.isSelected())
+                {
+                    AM = true;
+                }
+                else
+                {
+                    AM = false;
+                }
+
             }
         });
         JCheckBox enabledBox = new JCheckBox("Enable Alarm");
@@ -116,6 +133,8 @@ public class AlarmPanel {
         panel.add(minuteLabel,c );
         c.gridx = 3;
         panel.add(AMPM,c );
+        c.gridy = 2;
+        panel.add(amBox,c);
         c.gridwidth =1;
         c.anchor = GridBagConstraints.PAGE_END;
         c.gridy = 2;
@@ -126,16 +145,32 @@ public class AlarmPanel {
         panel.add(saveButton);
 
         hour = alarmManager.GetHour();
+        hourLabel.setText(String.valueOf(hour));
         minute = alarmManager.GetMinute();
+        minuteLabel.setText(String.valueOf(minute));
 
     }
 
     public void FormatDateTime(JTextField hourField, JTextField minField)
     {
         if(hourField.getText() != "" && hourField.getText() != null)
-            this.hour = Integer.parseInt(hourField.getText());
-        if(minField.getText() != "" && minField.getText() != null)
-            this.minute = Integer.parseInt(minField.getText());
+        {
+            try{
+                this.hour = Integer.parseInt(hourField.getText());
+            } catch (Exception e)
+            {
+
+            }
+        }
+              if(minField.getText() != "" && minField.getText() != null)
+        {
+            try{
+                this.minute = Integer.parseInt(minField.getText());
+            } catch (Exception e)
+            {
+
+            }
+        }
     }
 
 
