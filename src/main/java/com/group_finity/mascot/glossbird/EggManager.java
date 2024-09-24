@@ -4,6 +4,7 @@ import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Manager;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.environment.MascotEnvironment;
+import com.group_finity.mascot.glossbird.eggs.DestroyWindow;
 import com.group_finity.mascot.glossbird.eggs.Juggle;
 import com.group_finity.mascot.glossbird.eggs.ProcessChecker;
 import com.sun.jna.Native;
@@ -124,6 +125,29 @@ public class EggManager {
         }
             return false;
     }
+
+    public boolean IsWindowFocused()
+    {
+        String focusCurrent = FocusedWindow();
+        if(focusCurrent.equals(""))
+        {
+            return false;
+        }
+        else if(focusCurrent.equals("NOODS"))
+        {
+            return false;
+        }
+        else if(mainMascot.isDragging())
+        {
+            Main.getInstance().getHome().getFrame().toFront();
+            Main.getInstance().getHome().getFrame().requestFocus();
+            return false;
+        }
+        //System.out.println("Focused on " + focusCurrent);
+        return true;
+//        return foregroundWindow != null && !Arrays.toString(windowText).equals("DOGEEZ");
+    }
+
 
     public String FocusedWindow()
     {
@@ -451,6 +475,7 @@ public class EggManager {
         {
             activeJuggle.tick();
         }
+        DestroyWindow.getInstance().Tick();
     }
 
 

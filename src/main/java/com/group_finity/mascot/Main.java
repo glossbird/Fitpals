@@ -9,6 +9,7 @@ import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.glossbird.AlarmManager;
 import com.group_finity.mascot.glossbird.DialogueManager;
 import com.group_finity.mascot.glossbird.EggManager;
+import com.group_finity.mascot.glossbird.eggs.DestroyWindow;
 import com.group_finity.mascot.image.ImagePairs;
 import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
 import com.group_finity.mascot.sound.Sounds;
@@ -209,6 +210,8 @@ public class Main {
                 exit();
             }
         }
+
+        DestroyWindow.getInstance();
 
         // Load mascot configurations
         for (int index = 0; index < imageSets.size(); index++) {

@@ -13,14 +13,20 @@
         "dialogue": "Attention! Reminder time!!",
         "condition": "reminder",
         "audio_id": 1
-    }]
+    },
+      {
+        "dialogue": "Don't forget about {0}!",
+        "condition": "reminder",
+        "audio_id": -1,
+        "variable": "alarmname"
+      }]
   },
   "internet" : {
     "speechList": [{
         "dialogue": "Lots of internet for today, huh?",
         "condition": "internet",
         "altCondition": "runtime",
-        "conditionNumber": 45,
+        "conditionNumber": 2700,
         "audio_id": 1
 
     }]
@@ -62,5 +68,54 @@
         "audio_id": -1
       }
     ]
+  },
+  "EGG:juggle" : {
+    "speechList" : [
+      {
+        "dialogue": "Let's get this W!",
+        "condition": "juggle",
+        "altCondition": "open",
+        "audio_id": -1
+      },
+      {
+        "dialogue": "Wow, keep it going!",
+        "condition": "juggle",
+        "altCondition": "egg",
+        "conditionNumber": 50,
+        "audio_id": -1
+      },
+      {
+        "dialogue": "What a pro!",
+        "condition": "juggle",
+        "altCondition": "egg",
+        "conditionNumber": 100,
+        "audio_id": -1
+      },
+      {
+        "dialogue": "I'm dizzy, but that was fun!",
+        "condition": "juggle",
+        "altCondition": "close",
+        "audio_id": -1
+      }
+    ]
+  },
+  "EGG:destroy": {
+    "speechList" : [
+      {
+        "dialogue": "Time to destroy {0}",
+        "condition": "destroy",
+        "altCondition": "open",
+        "variable": "window",
+        "audio_id": -1
+      },
+      {
+        "dialogue": "{0} - Destroyed!",
+        "condition": "destroy",
+        "altCondition": "close",
+        "variable": "window",
+        "audio_id": -1
+      }
+    ]
+
   }
 }

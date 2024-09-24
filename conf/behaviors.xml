@@ -44,6 +44,12 @@
         <Behavior Name ="Go Home" Frequency="0" Hidden="false"/>
         <Behavior Name ="LeaveHome" Frequency="0" Hidden="true"/>
 
+        <!-- Destroy -->
+        <Behavior Name ="Destroy" Frequency="0" Hidden="true"/>
+        <Behavior Name="Destroy Window" Frequency="0" Hidden="false"/>
+        <Behavior Name ="DestroyWarp" Frequency="0" Hidden="true"/>
+
+
         <!-- On the Floor -->
         <Condition Condition="#{mascot.environment.floor.isOn(mascot.anchor)}">
             <Behavior Name="StandUp" Frequency="200" Hidden="true"/>

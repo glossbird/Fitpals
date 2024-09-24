@@ -8,8 +8,8 @@ import java.util.List;
 
 public class SaveData {
 
-    @JsonDeserialize(as = AlarmData.class)
-    public AlarmData alarmData;
+    @JsonDeserialize(as = AlarmSave.class)
+    public AlarmSave alarmSave;
 
     List<MascotData> SavedMascots;
     public SaveData()
@@ -21,17 +21,17 @@ public class SaveData {
 
 
     @JsonCreator
-    public SaveData(@JsonProperty("alarmData") AlarmData data)
+    public SaveData(@JsonProperty("alarmSave") AlarmSave data)
     {
-        this.alarmData =data;
+        this.alarmSave =data;
     }
 
-    public AlarmData getAlarmData() {
-        return alarmData;
+    public AlarmSave getAlarmSave() {
+        return alarmSave;
     }
 
-    public void setAlarmData(AlarmData alarmData) {
-        this.alarmData = alarmData;
+    public void setAlarmSave(AlarmSave alarmData) {
+        this.alarmSave = alarmData;
     }
 }
 

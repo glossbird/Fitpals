@@ -45,12 +45,8 @@ public class SaveSystem {
 
     }
 
-    public void Load()
-    {
 
-    }
-
-    public AlarmData Load(AlarmData typedata) throws FileNotFoundException {
+    public void Load() throws FileNotFoundException {
         ObjectMapper mapper = new ObjectMapper();
         Reader reader;
         try {
@@ -61,7 +57,8 @@ public class SaveSystem {
         try {
             SaveData data1 = mapper.readValue(reader, SaveData.class);
             this.data = data1;
-            typedata = data1.alarmData;
+            this.data.alarmSave = data1.getAlarmSave();
+            AlarmSave.getInstance().LoadAlarms(this.data.alarmSave);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -71,9 +68,6 @@ public class SaveSystem {
             throw new RuntimeException(e);
         }
 
-        this.data.alarmData = typedata;
-        return this.data.alarmData;
-
     }
 
 
@@ -81,7 +75,7 @@ public class SaveSystem {
     public void Save()
     {
         data = new SaveData();
-        data.alarmData = Main.getInstance().getAlarmManager().getData();
+        data.alarmSave = AlarmSave.getInstance();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         String dataJson;

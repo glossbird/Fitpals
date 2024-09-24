@@ -87,27 +87,39 @@ public class Juggle {
             if(dragging)
             {
                 dragging = false;
+                dragTime = 0;
                 juggleCount++;
+                manager.CallEasterEggConditionally("EGG:juggle","egg",juggleCount);
             }
         }
 
         if(hasTouchedGround || heldTooLong)
         {
-            juggling = false;
-            if(mainMascot.getLinkedData() != null)
-            {
-                if(juggleCount > mainMascot.getLinkedData().HighScore_juggle)
-                {
-                    mainMascot.getLinkedData().HighScore_juggle = juggleCount;
-                }
-            }
+            JuggleClose();
+        }
 
-            if(frameOpen)
+    }
+
+    void JuggleClose()
+    {
+        juggling = false;
+        if(mainMascot.getLinkedData() != null)
+        {
+            if(juggleCount > mainMascot.getLinkedData().HighScore_juggle)
             {
-                RefreshFrame();
-                juggleWindow.dispatchEvent(new WindowEvent(juggleWindow, WindowEvent.WINDOW_CLOSING));
-                frameOpen = false;
+                mainMascot.getLinkedData().HighScore_juggle = juggleCount;
             }
+        }
+
+        if(frameOpen)
+        {
+            RefreshFrame();
+            juggleWindow.dispatchEvent(new WindowEvent(juggleWindow, WindowEvent.WINDOW_CLOSING));
+            frameOpen = false;
+        }
+        if(juggleCount>5)
+        {
+            manager.CallEasterEgg("EGG:juggle", "close");
         }
 
     }
@@ -115,6 +127,7 @@ public class Juggle {
     void OpenJuggleFrame()
     {
         frameOpen = true;
+        manager.CallEasterEgg("EGG:juggle","open");
         juggleWindow = new JFrame();
         JPanel panel = new JPanel(new GridBagLayout());
         scoreText = new JLabel("Score: ");

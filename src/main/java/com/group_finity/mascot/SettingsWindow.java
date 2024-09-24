@@ -5,6 +5,7 @@
  */
 package com.group_finity.mascot;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.nilo.plaf.nimrod.NimRODFontDialog;
 import com.nilo.plaf.nimrod.NimRODLookAndFeel;
 import com.nilo.plaf.nimrod.NimRODTheme;
@@ -33,7 +34,7 @@ public class SettingsWindow extends JDialog {
     private static final Logger log = Logger.getLogger(SettingsWindow.class.getName());
     private NimRODTheme theme;
     private NimRODTheme oldTheme;
-    private NimRODLookAndFeel lookAndFeel;
+    private FlatLightLaf lookAndFeel;
     private final ArrayList<String> listData = new ArrayList<>();
     private Boolean alwaysShowShimejiChooser = false;
     private Boolean alwaysShowInformationScreen = false;
@@ -180,7 +181,7 @@ public class SettingsWindow extends JDialog {
         oldTheme.setWhite(whiteColour);
         oldTheme.setMenuOpacity((int) (menuOpacity * 255));
         oldTheme.setFont(font);
-        lookAndFeel = (NimRODLookAndFeel) UIManager.getLookAndFeel();
+        lookAndFeel = (FlatLightLaf) UIManager.getLookAndFeel();
 
         chkWindowModeEnabled.setSelected(windowedMode);
         spnWindowWidth.setBackground(txtBackgroundColour.getBackground());

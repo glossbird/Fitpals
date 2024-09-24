@@ -29,7 +29,7 @@ public class CustomTitlebar extends JFrame
 
         }catch(Exception e){}
 
-        setTitle("DOGEEZ");
+        setTitle("NOODS");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setUndecorated(true);
 

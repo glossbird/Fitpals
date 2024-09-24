@@ -14,6 +14,7 @@ public class Speech {
     int audio_id;
     String mp3String;
     String behavior;
+    String variable;
     public Speech()
     {
         super();
@@ -30,6 +31,19 @@ public class Speech {
         this.conditionNumber = -1;
         this.altCondition = "";
         this.behavior = "";
+        this.variable = "";
+    }
+    public Speech(String dialogue, String condition, int audio_id, String variable)
+    {
+        super();
+        this.dialogue = dialogue;
+        this.condition = condition;
+        this.audio_id = audio_id;
+        this.mp3String = condition + "_" + audio_id;
+        this.conditionNumber = -1;
+        this.altCondition = "";
+        this.behavior = "";
+        this.variable = variable;
     }
 
     public String getMp3String()
@@ -87,5 +101,13 @@ public class Speech {
 
     public void setBehavior(String behavior) {
         this.behavior = behavior;
+    }
+
+    public String getVariable() {
+        return variable;
+    }
+
+    public void setVariable(String variable) {
+        this.variable = variable;
     }
 }

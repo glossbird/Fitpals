@@ -1,8 +1,10 @@
 package com.group_finity.mascot.environment.home;
 
 import com.group_finity.mascot.Main;
+import com.group_finity.mascot.Manager;
 import com.group_finity.mascot.environment.home.UI.AlarmPanel;
 import com.group_finity.mascot.environment.home.UI.CustomTitlebar;
+import com.group_finity.mascot.environment.home.UI.TimerPanel;
 import com.group_finity.mascot.glossbird.Screenshot;
 
 import javax.imageio.ImageIO;
@@ -24,6 +26,15 @@ public class HomeUI {
     Screenshot screenshot;
     Point loc;
     JFrame frame;
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
     public HomeUI() throws IOException {
         super();
          frame =  new CustomTitlebar();
@@ -36,7 +47,9 @@ public class HomeUI {
         JTextField textField = new JTextField(50);
         JLabel homeLabel = new JLabel("Home");
         JButton alarmButton = new JButton("Alarm");
+        JButton timerButton = new JButton("Timer");
         JButton trinkets = new JButton("Trinkets");
+        JButton destroy = new JButton("Destroy");
         JButton selfie = new JButton();
         BufferedImage selfieImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), Main.getInstance().getMainMascot().getImageSet() + "/ui/selfie.png"));
         selfie.setIcon(new ImageIcon(selfieImg));
@@ -44,7 +57,10 @@ public class HomeUI {
         BufferedImage homeImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(),  "House_Menu.png"));
         homeImage.setIcon(new ImageIcon(homeImg));
         alarmButton.setSize(200,100);
+        timerButton.setSize(200,100);
+
         selfie.setSize(100,100);
+        destroy.setSize(100,100);
         screenshot = new Screenshot(this);
         selfie.addActionListener(new ActionListener() {
             @Override
@@ -56,6 +72,13 @@ public class HomeUI {
                 }
             }
         });
+        destroy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.getInstance().getManager().setBehaviorAll("DestroyWindow");
+            }
+        });
+
         alarmPanel = new AlarmPanel(Main.getInstance().getAlarmManager());
         alarmButton.addActionListener(new ActionListener(){
             @Override
@@ -66,6 +89,18 @@ public class HomeUI {
             }
 
         });
+        timerButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent evt)
+            {
+                TimerPanel tp = new TimerPanel();
+
+
+
+            }
+
+        });
+
 
         JPanel panel = new JPanel()
         {
@@ -107,8 +142,12 @@ public class HomeUI {
         backPanel.add(door);
         backPanel.add(homeLabel);
         backPanel.add(alarmButton);
+        backPanel.add(timerButton);
         backPanel.add(selfie);
+        backPanel.add(destroy);
         alarmButton.setBounds(80,160,60,60);
+        destroy.setBounds(168,160,60,60);
+        timerButton.setBounds(80,280,60,60);
         selfie.setBounds(255,160,60,60);
         door.setBounds(168, 250, 75, 140);
         door.addActionListener(new ActionListener() {

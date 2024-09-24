@@ -5,6 +5,7 @@ import com.group_finity.mascot.behavior.Behavior;
 import com.group_finity.mascot.config.Configuration;
 import com.group_finity.mascot.environment.Area;
 import com.group_finity.mascot.environment.MascotEnvironment;
+import com.group_finity.mascot.environment.home.DebugWindowNew;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.glossbird.MascotData;
@@ -136,6 +137,11 @@ public class Mascot {
      */
     private Point cursor = null;
 
+    public boolean IsWindowFocused()
+    {
+        System.out.println("Checking window focus");
+        return Main.getInstance().eggMan.IsWindowFocused();
+    }
     public Mascot(final String imageSet) {
         id = lastId.incrementAndGet();
         this.imageSet = imageSet;
@@ -238,6 +244,11 @@ public class Mascot {
         }
     }
 
+    public void RefreshOnTop()
+    {
+        getWindow().setAlwaysOnTop(false);
+        getWindow().setAlwaysOnTop(true);
+    }
     @Override
     public String toString() {
         return "mascot" + id;
@@ -452,6 +463,7 @@ public class Mascot {
                 debugWindow.setWindowY(activeWindow.getTop());
                 debugWindow.setWindowWidth(activeWindow.getWidth());
                 debugWindow.setWindowHeight(activeWindow.getHeight());
+                debugWindow.setFocusedValue(String.valueOf(IsWindowFocused()));
 
                 Area workArea = environment.getWorkArea();
                 debugWindow.setEnvironmentX(workArea.getLeft());

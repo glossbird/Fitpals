@@ -45,6 +45,7 @@ public class Audio implements Runnable{
         final AudioProcessor playerProcessor;
         try {
             playerProcessor = new AudioPlayer(adp.getFormat(), 22050);
+
         } catch (LineUnavailableException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +63,7 @@ public class Audio implements Runnable{
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        
         adp.run();
 
 

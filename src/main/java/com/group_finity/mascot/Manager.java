@@ -6,6 +6,7 @@ import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.glossbird.DialogueManager;
 import com.group_finity.mascot.glossbird.EggManager;
+import com.group_finity.mascot.glossbird.eggs.DestroyWindow;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -191,6 +192,8 @@ public class Manager {
 
         eggMan.tick();
         diagMan.tick();
+        Main.getInstance().alarmManager.tick();
+
 
         if (isExitOnLastRemoved() && getMascots().isEmpty()) {
             // exitOnLastRemoved is true and there are no mascots left, so exit.

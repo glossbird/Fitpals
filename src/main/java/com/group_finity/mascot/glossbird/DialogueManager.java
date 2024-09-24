@@ -96,6 +96,10 @@ public class DialogueManager {
 
     public List<Speech> SortSpeechListByCondition(List<Speech> speechList)
     {
+        if(speechList == null || speechList.size() == 0)
+        {
+            return  null;
+        }
         speechList.removeIf(speech -> speech.getConditionNumber() < 0);
         speechList.sort(Comparator.comparingInt(Speech::getConditionNumber).reversed());
         return  speechList;
@@ -198,6 +202,16 @@ public class DialogueManager {
 
     }
 
+    String variable = "";
+
+    public void PlayRandomSpeechWithVariable(String speechID, String variable)
+    {
+        this.variable = variable;
+        Speech toSay = LoadMessageOfCondition(speechID);
+        PlaySpeech(toSay);
+    }
+
+
     public void PlayRandomSpeech(String speechID)
     {
         Speech toSay = LoadMessageOfCondition(speechID);
@@ -205,6 +219,23 @@ public class DialogueManager {
 
     }
 
+    public String FillVariable(String var)
+    {
+        String output = "";
+        switch(var)
+        {
+            case "window":
+                output = mainMascot.getEnvironment().getActiveIETitle();
+                break;
+            case "alarmname":
+                output = this.variable + "";
+                break;
+            default:
+                output = "";
+                break;
+        }
+        return output;
+    }
 
 
     public void PlaySpeech(Speech speech)
@@ -213,6 +244,12 @@ public class DialogueManager {
         {
             System.out.println("Can't play null speech.");
             return;
+        }
+        else if(speech.variable!= null && !speech.variable.isEmpty())
+        {
+            String replacement = speech.getDialogue();
+            replacement = replacement.replace("{0}",FillVariable(speech.getVariable()));
+            speech.setDialogue(replacement);
         }
         safeSetActiveMessage(speech.dialogue);
         if(speech.audio_id != -1)
@@ -283,6 +320,7 @@ public class DialogueManager {
         messageBox.setSize(dim);
         label.setText("");
         messageBox.setVisible(true);
+        //messageBox.toFront();
         active = true;
     }
 
@@ -372,6 +410,7 @@ public class DialogueManager {
         if(stopCurrentMessage)
         {
             CloseMessage();
+            variable = "";
             StartTextbox();
             return;
         }
@@ -381,7 +420,7 @@ public class DialogueManager {
             return;
         }
         tempMessage = activeMessage.substring(0, position);
-        messageBox.toFront();
+        //messageBox.toFront();
         label.setText(tempMessage);
         position++;
         if(typewriterSound)

@@ -773,6 +773,63 @@
             </Animation>
         </Action>
 
+        <!-- Destroy -->
+
+        <Action Name="Destroy Window" Type="Sequence" >
+            <Action Type="Sequence">
+                <ActionReference Name="SitAndDangleLegs" Duration="${45}"/>
+                <ActionReference Name="Destroy" End="Start"/>
+                <Action Type="Select" Condition="${mascot.IsWindowFocused()}">
+                    <ActionReference Name="StandUp" Condition="${!mascot.IsWindowFocused()}"/>
+                    <ActionReference Name="DestroyMid" Condition="${mascot.IsWindowFocused()}"/>
+                </Action>
+                <ActionReference Name="Destroy" End="End"/>
+            </Action>
+        </Action>
+
+        <Action Name="Destroy" Type="Embedded" Class="com.group_finity.mascot.action.Destroy">
+            <Animation>
+                <Pose Image="/shime31.png" ImageAnchor="64,112" Velocity="0,0" Duration="5"/>
+            </Animation>
+        </Action>
+
+        <Action Type="Sequence" Name="DestroyMid">
+            <ActionReference Name="Jumping"
+                             TargetX="${mascot.environment.activeIE.left}"
+                             TargetY="${mascot.environment.activeIE.bottom}"/>
+            <ActionReference Name="DestroyWarp" TargetX="${mascot.environment.activeIE.right-64}" Duration="${25}"/>
+            <ActionReference Name="Offset" X="50" Y="50"/>
+            <ActionReference Name="Jumping"
+                             TargetX="${mascot.environment.activeIE.right}"
+                             TargetY="${mascot.environment.activeIE.top}"/>
+            <ActionReference Name="DestroyWarp" TargetX="${mascot.environment.activeIE.left+64}" Duration="${25}"/>
+            <ActionReference Name="Offset" X="-50" Y="-50"/>
+            <ActionReference Name="DestroyWarp" TargetX="${mascot.environment.activeIE.right-64}" Duration="${25}"/>
+            <ActionReference Name="Offset" X="50" Y="50"/>
+            <ActionReference Name="DestroyWarp" TargetX="${mascot.environment.activeIE.left+64}" Duration="${25}"/>
+            <ActionReference Name="Jumping"
+                             TargetX="${mascot.environment.activeIE.left}"
+                             TargetY="${mascot.environment.activeIE.bottom}"/>
+            <ActionReference Name="DestroyWarp" TargetX="${mascot.environment.activeIE.right-64}" Duration="${25}"/>
+            <ActionReference Name="Offset" X="50" Y="50"/>
+            <ActionReference Name="Jumping"
+                             TargetX="${mascot.environment.activeIE.right}"
+                             TargetY="${mascot.environment.workArea.bottom}"
+            />
+            <Action Type="Select" Duration="${500}">
+                <ActionReference Name="WalkAndThrowIEFromLeft" Condition="${!mascot.environment.floor.isOn(mascot.anchor)}"/>
+                <ActionReference Name="WalkAndThrowIEFromRight" Condition="${mascot.environment.floor.isOn(mascot.anchor)}"/>
+            </Action>
+
+        </Action>
+
+        <Action Name="DestroyWarp" Type="Move">
+            <Animation>
+                <Pose Image="/shime47.png" ImageAnchor="64,128" Velocity="-6,0" Duration="6"/>
+                <Pose Image="/shime48.png" ImageAnchor="64,128" Velocity="6,0" Duration="6"/>
+            </Animation>
+        </Action>
+
         <!-- Home -->
         <Action Name="Go Home" Type="Sequence" Loop="false">
             <ActionReference Name="Run"

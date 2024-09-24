@@ -1,8 +1,10 @@
 package com.group_finity.mascot.environment.home.UI;
 
+import com.group_finity.mascot.Main;
 import com.group_finity.mascot.environment.home.HomeUI;
 import com.group_finity.mascot.glossbird.AlarmData;
 import com.group_finity.mascot.glossbird.AlarmManager;
+import com.group_finity.mascot.glossbird.AlarmSave;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,168 +17,145 @@ import java.awt.event.ActionListener;
 public class AlarmPanel {
 
     JFrame alarmPanel;
+    JButton button;
+    JPanel panel;
     AlarmManager alarmManager;
     int hour = 12;
     int minute = 0;
     boolean enabled;
     boolean AM = false;
-    public AlarmPanel(AlarmManager manager){
-        super();
-        this.alarmManager = manager;
-        alarmPanel = new JFrame("Alarm");
+    JFormattedTextField hourLabel;
+    JFormattedTextField minuteLabel;
+    JLabel colon;
+    JButton saveButton;
+    private JLabel title;
+    private JButton addnew;
+    private JLabel On;
+    private JLabel editLabel;
+    private JPanel formPanel;
+    private JPanel ToolBarPane;
+    private JPanel BorderLayoutPanel;
+    private JScrollPane ScrollPane;
+    private JToolBar alarmBar;
+    private JRadioButton EnabledButton;
+    private JLabel Name;
+    private JLabel Time;
+    private JButton Edit;
+    private JScrollBar scrollBar1;
 
-        GridBagLayout layout = new GridBagLayout();
-        JPanel panel = new JPanel(layout);
-        alarmPanel.getContentPane().add(panel);
-        panel.setLayout(layout);
-        alarmPanel.setSize(200,150);
-        JButton button = new JButton("Alarm");
-        Rectangle boundsTwo = HomeUI.getMaxWindowBounds(alarmPanel);
-        alarmPanel.setLocation(boundsTwo.x + boundsTwo.width - alarmPanel.getWidth(), boundsTwo.y + boundsTwo.height - alarmPanel.getHeight());
+    GroupLayout groupLayout;
+    public  JToolBar GenerateBar(AlarmData alarm)
+    {
+        JToolBar bar = new JToolBar();
+        bar.setLayout(new GridLayout(0,4));
+        JRadioButton EnabledButton;
+        JLabel nameLabel;
 
-        JFormattedTextField hourLabel = new JFormattedTextField(this.hour);
-        hourLabel.addActionListener(new ActionListener() {
+        JLabel timeLabel;
+        JButton editButton;
+
+        EnabledButton = new JRadioButton();
+        EnabledButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                hour = Integer.parseInt(hourLabel.getText());
+                alarmManager.ToggleAlarm(alarm.getId(),EnabledButton.isEnabled());
             }
         });
-        JLabel colon = new JLabel(":");
-        JFormattedTextField minuteLabel = new JFormattedTextField(minute);
-        minuteLabel.addActionListener(new ActionListener() {
+        if(alarm.isEnabled())
+        {
+            EnabledButton.setSelected(true);
+        }
+        nameLabel = new JLabel(alarm.getName());
+        timeLabel = new JLabel(alarm.GetFormattedDate());
+        editButton = new JButton("Edit");
+        editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                minute = Integer.parseInt(minuteLabel.getText());
+                AlarmEditing editTime = new AlarmEditing();
+                editTime.setManager(alarmManager);
+                alarmManager.SetActiveAlarmData(alarm.getId());
+                editTime.run();
             }
         });
 
-        DocumentListener dl = new DocumentListener() {
+        bar.add(EnabledButton);
+        bar.add(nameLabel);
+        bar.add(timeLabel);
+        bar.add(editButton);
+        bar.setVisible(true);
+        return bar;
+    }
 
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
+    JPanel refPanel;
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
+    JPanel AllAlarms()
+    {
+        refPanel = null;
+        JPanel panel = new JPanel();
+        BoxLayout box = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(box);
+        for(AlarmData data : AlarmSave.getInstance().GetAllAlarms())
+        {
+            JToolBar testBar = GenerateBar(data);
+            System.out.println("Adding bar " + data.getName());
+            panel.add(testBar);
+        }
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
+        return panel;
+    }
 
-            protected void updateFieldState() {
-                FormatDateTime(hourLabel,minuteLabel);
-            }
-        };
+    public void RefreshVisuals()
+    {
+        frame.setVisible(false);
+        refPanel = AllAlarms();
+        ToolBarPane.validate();
+        ToolBarPane.repaint();
+        ScrollPane.setViewportView(refPanel);
+        // ScrollPane.setSize(frame.getPreferredSize());
+        ScrollPane.validate();
+        frame.invalidate();
+        frame.validate();
 
-        hourLabel.getDocument().addDocumentListener(dl);
-        minuteLabel.getDocument().addDocumentListener(dl);
+        frame.pack();
+        frame.setSize(frame.getPreferredSize());
+        frame.repaint();
+        frame.setVisible(true);
+    }
 
+    JFrame frame;
 
-        JLabel AMPM = new JLabel("PM");
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridy = 2;
-        c.gridx = 0;
-
-        JButton hourUp = new JButton();
-        JButton hourDown = new JButton();
-        JButton minuteUp = new JButton();
-        JButton minuteDown = new JButton();
-
-
-        JButton saveButton =  new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
+    public  void run() {
+        frame = new JFrame("AlarmPanel");
+        frame.setContentPane(formPanel);
+        addnew.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                alarmManager.Save(new AlarmData(hour,minute,enabled));
+                int newId = alarmManager.CreateAlarm();
+                RefreshVisuals();
+                AlarmSave.getInstance().Save();
             }
         });
-        JCheckBox amBox = new JCheckBox("AM/PM");
-        amBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(amBox.isSelected())
-                {
-                    AM = true;
-                }
-                else
-                {
-                    AM = false;
-                }
+        RefreshVisuals();
+        frame.setLocation(Main.getInstance().getHome().GetHomePosition().x-150,Main.getInstance().getHome().GetHomePosition().y);
+        //frame.setVisible(true);
+    }
 
-            }
-        });
-        JCheckBox enabledBox = new JCheckBox("Enable Alarm");
-        enabledBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(enabledBox.isSelected())
-                {
-                    enabled = true;
-                }
-                else
-                {
-                    enabled = false;
-                }
-
-            }
-        });
-        c.gridy = 1;
-        panel.add(hourLabel,c );
-        c.gridx = 1;
-        panel.add(colon,c );
-        c.gridx = 2;
-        panel.add(minuteLabel,c );
-        c.gridx = 3;
-        panel.add(AMPM,c );
-        c.gridy = 2;
-        panel.add(amBox,c);
-        c.gridwidth =1;
-        c.anchor = GridBagConstraints.PAGE_END;
-        c.gridy = 2;
-        c.gridx = 0;
-        panel.add(enabledBox,c);
-        c.gridx = 1;
-        c.gridy = 3;
-        panel.add(saveButton);
-
-        hour = alarmManager.GetHour();
-        hourLabel.setText(String.valueOf(hour));
-        minute = alarmManager.GetMinute();
-        minuteLabel.setText(String.valueOf(minute));
+    public AlarmPanel()
+    {
 
     }
 
-    public void FormatDateTime(JTextField hourField, JTextField minField)
-    {
-        if(hourField.getText() != "" && hourField.getText() != null)
-        {
-            try{
-                this.hour = Integer.parseInt(hourField.getText());
-            } catch (Exception e)
-            {
+    public AlarmPanel(AlarmManager manager){
 
-            }
-        }
-              if(minField.getText() != "" && minField.getText() != null)
-        {
-            try{
-                this.minute = Integer.parseInt(minField.getText());
-            } catch (Exception e)
-            {
-
-            }
-        }
+        this.alarmManager = manager;
+        this.alarmManager.setAlarmPanel(this);
     }
 
 
     public void OpenPanel()
     {
-        alarmPanel.setVisible(true);
+        run();
+       // alarmPanel.setVisible(true);
     }
 
 }

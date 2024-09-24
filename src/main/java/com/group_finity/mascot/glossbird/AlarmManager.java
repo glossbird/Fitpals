@@ -1,6 +1,7 @@
 package com.group_finity.mascot.glossbird;
 
 import com.group_finity.mascot.Main;
+import com.group_finity.mascot.environment.home.UI.AlarmPanel;
 import org.joda.time.DateTime;
 
 import java.io.FileNotFoundException;
@@ -15,137 +16,146 @@ public class AlarmManager {
     public DateTime alarm;
     public static Timer timer = new Timer();
     boolean alarmPlaying = false;
+    AlarmPanel alarmPanel;
     Audio sound;
-    public AlarmData getData() {
-        return data;
+
+    AlarmData activeData;
+
+    public AlarmData getActiveData() {
+        return activeData;
     }
 
-    public void setData(AlarmData data) {
-        this.data = data;
+    public AlarmPanel getAlarmPanel() {
+        return alarmPanel;
     }
 
-    AlarmData data;
+    public void setAlarmPanel(AlarmPanel alarmPanel) {
+        this.alarmPanel = alarmPanel;
+    }
+
+    public void setActiveData(AlarmData activeData) {
+        this.activeData = activeData;
+    }
+
     public AlarmManager()
     {
         super();
-        data = new AlarmData(alarmTime.get(Calendar.HOUR), alarmTime.get(Calendar.MINUTE), false);
         this.init();
     }
 
     public void init()
     {
-        data.enabled = false;
         LoadAlarmTime();
-
     }
+
+    public void ToggleAlarm(int id, boolean toggle)
+    {
+        AlarmData data = GetAlarmFromID(id);
+
+        data.setEnabled(toggle);
+        AlarmSave.getInstance().UpdateAlarm(data);
+    }
+
 
     public void LoadAlarmTime()
     {
         try {
-            this.data = SaveSystem.getInstance().Load(data);
+            SaveSystem.getInstance().Load();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
-        if(data.enabled)
-            this.SetAlarmTime(data.hour, data.minute);
+        for(AlarmData data : AlarmSave.getInstance().GetAllAlarms())
+        {
+            data.init();
+        }
 
     }
 
+    public void SetActiveAlarmData(int id)
+    {
+        this.activeData = GetAlarmFromID(id);
+        System.out.println("Editing alarm with id " + id);
+    }
+
+
+    public AlarmData GetAlarmFromID(int id)
+    {
+        for (AlarmData data : AlarmSave.getInstance().GetAllAlarms())
+        {
+            if(data.getId() == id)
+            {
+                return data;
+            }
+        }
+        return null;
+    }
+
+    public void RefreshPanel()
+    {
+        if(alarmPanel!= null)
+        {
+            alarmPanel.RefreshVisuals();
+        }
+    }
+
+    public int CreateAlarm()
+    {
+        AlarmData newData = new AlarmData();
+        AlarmSave.getInstance().AddAlarm(newData);
+        newData.init();
+
+        return  newData.getId();
+    }
+
+
     public void SetHour(int hour)
     {
-        this.data.hour = hour;
-        alarmTime.set(Calendar.HOUR, this.data.hour);
+        this.activeData.hour = hour;
+        alarmTime.set(Calendar.HOUR_OF_DAY, this.activeData.hour);
     }
 
     public void SetMinute(int minute)
     {
-        this.data.minute = minute;
-        alarmTime.set(Calendar.MINUTE, this.data.minute);
+        this.activeData.minute = minute;
+        alarmTime.set(Calendar.MINUTE, this.activeData.minute);
     }
 
     public int GetHour()
     {
-        return this.data.hour;
+        if(this.activeData == null)
+        {
+            return -1;
+        }
+        return this.activeData.hour;
     }
 
     public int GetMinute()
     {
-        return this.data.minute;
-    }
-
-    void Tick()
-    {
-        if(alarmPlaying)
+        if(this.activeData == null)
         {
-            if(Main.getInstance().eggMan.RecentActionExist("Behavior(Dragged)"))
-            {
-                sound.Stop();
-            }
+            return -1;
         }
+        return this.activeData.minute;
     }
-    public void Schedule()
+
+    public void tick()
     {
-        timer.purge();
-        if(data.enabled)
+        for(AlarmData data : AlarmSave.getInstance().alarmDataList)
         {
-
-            System.out.println("Scheduling for " + alarmTime.getTime());
-
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run()
-                {
-                    Main.getInstance().getManager().setBehaviorAll("Alarm");
-                    Main.getInstance().getDiagMan().PlayRandomSpeech("reminder");
-                    sound = AudioManager.getInstance().playSound("alarm");
-                    alarmPlaying = true;
-
-                }
-
-            }, dateFromDateTime(alarm));
+            data.Tick();
         }
-
-    }
-
-    public Date dateFromDateTime(DateTime time)
-    {
-        Date date = new Date();
-        date = time.toDate();
-        return date;
     }
 
     public void Save(AlarmData indata)
     {
-        this.data = indata;
-        SetAlarmTime(this.data.hour, this.data.minute);
-        Schedule();
+        AlarmSave.getInstance().UpdateAlarm(indata);
         SaveSystem.getInstance().Save();
     }
 
 
 
-    public void SetAlarmTime(int hour, int minute)
-    {
-        alarmTime.set(Calendar.DATE, Calendar.getInstance().get(Calendar.DATE));
-        alarmTime.set(Calendar.HOUR_OF_DAY, hour);
-        alarmTime.set(Calendar.MINUTE, minute);
-        alarmTime.set(Calendar.SECOND, 0);
-        System.out.println("alarm time is " + alarmTime.getTime());
-        System.out.println("Current time is " + DateTime.now().toDate());
 
-        if(alarmTime.getTime().before(DateTime.now().toDate()))
-        {
-            alarmTime.set(Calendar.DATE, Calendar.getInstance().get(Calendar.DATE)+1);
-        }
-        else
-        {
-            alarmTime.set(Calendar.DATE, Calendar.getInstance().get(Calendar.DATE));
-        }
-
-        alarm = new DateTime(alarmTime);
-        Schedule();
-    }
 
 
 
