@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.group_finity</groupId>
-    <artifactId>mascot</artifactId>
+    <artifactId>Noods</artifactId>
     <version>1.0.21.1</version>
     <packaging>jar</packaging>
 
-    <name>Fitpals</name>
+    <name>NOODS</name>
     <description/>
-    <url>https://github.com/DalekCraft2/Shimeji-Desktop</url>
+    <url>https://github.com/glossbird/Fitpals</url>
     <inceptionYear/>
     <licenses/>
 
@@ -27,18 +27,38 @@
         <mainClass>com.group_finity.mascot.Main</mainClass>
         <libPrefix>lib</libPrefix>
         <libDirectory>${project.build.directory}/${libPrefix}</libDirectory>
+        <intellij.version>241.18034.62</intellij.version>
     </properties>
     <repositories>
         <repository>
+            <id>grazie</id>
+            <url>https://packages.jetbrains.team/maven/p/grazi/grazie-platform-public</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+            <name>jitpack</name>
         </repository>
         <repository>
             <id>be.0110.repo-releases</id>
             <name>0110.be repository</name>
             <url>https://mvn.0110.be/releases</url>
         </repository>
-
+        <repository>
+            <id>intellij</id>
+            <url>https://www.jetbrains.com/intellij-repository/releases</url>
+            <name>intellij</name>
+        </repository>
+        <repository>
+            <id>intellij-deps</id>
+            <url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies</url>
+            <name>intellij-deps</name>
+        </repository>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+            <name>central</name>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -56,14 +76,34 @@
             <version>5.14.0</version>
             <scope>compile</scope>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna-platform -->
         <dependency>
-            <!-- Java Native Access Platform -->
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna-platform</artifactId>
             <version>5.14.0</version>
-            <scope>compile</scope>
         </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.jetbrains.intellij.uiDesigner/ui-designer-->
+        <dependency>
+            <groupId>com.jetbrains.intellij.uiDesigner</groupId>
+            <artifactId>ui-designer</artifactId>
+            <version>242.22855.74</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.jetbrains.intellij.java/java-gui-forms-rt-->
+        <dependency>
+            <groupId>com.jetbrains.intellij.java</groupId>
+            <artifactId>java-gui-forms-rt</artifactId>
+            <version>242.22855.106</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+
+
+
 
         <dependency>
             <!-- Nimrod Look and Feel -->
@@ -83,6 +123,7 @@
             <version>15.4</version>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
@@ -184,6 +225,7 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
+
             <!-- <plugin>
                 &lt;!&ndash; Attach sources &ndash;&gt;
                 <groupId>org.apache.maven.plugins</groupId>
@@ -254,6 +296,36 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>testUiClient</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        my.personal.MainClass
+                                    </mainClass>
+                                </manifest>
+                                <manifestEntries>
+                                    <Multi-Release>true</Multi-Release>
+                                    <Class-Path>.</Class-Path>
+                                </manifestEntries>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <!-- Parse version components and create properties for them -->
                 <groupId>org.codehaus.mojo</groupId>
@@ -335,6 +407,24 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
+                    <!--<execution>
+                        <phase>compile</phase>
+                        <configuration>
+                            <target>
+                                <path id="j2sp">
+                                    <pathelement location="${project.basedir}/src/main/java"/>
+                                </path>
+                                <taskdef name="javac2" classpathref="maven.runtime.classpath" classname="com.intellij.ant.Javac2"/>
+                                <javac2 destdir="${project.basedir}/target/classes">
+                                    <src refid="j2sp"/>
+                                </javac2>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>-->
+
                     <execution>
                         <!-- Create ZIP files for the source and the three release variants -->
                         <id>create-zips</id>

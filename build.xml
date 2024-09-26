@@ -57,8 +57,8 @@
 	</target>
 
 	<target name="custom_zip" >
-		<delete file="target/Fitpals.zip"/>
-		<zip destfile="target/Fitpals.zip">
+		<delete file="target/NOODS.zip"/>
+		<zip destfile="target/NOODS.zip">
 			<fileset dir=".">
 				<include name="lib/*" />
 				<include name="jdk-22/**/*" />
@@ -84,8 +84,8 @@
 	</target>
 
 	<target name="pom_zip" >
-		<delete file="target/Fitpals.zip"/>
-		<zip destfile="target/Fitpals.zip">
+		<delete file="target/NOODS.zip"/>
+		<zip destfile="target/NOODS.zip">
 			<fileset dir=".">
 				<include name="lib/*" />
 				<include name="jdk-22/**/*" />
@@ -104,8 +104,8 @@
 				<exclude name="*.log" />
 			</fileset>
 			<fileset dir="target">
-				<include name="Fitpals.exe"/>
-				<include name="Fitpals.jar"/>
+				<include name="NOODS.exe"/>
+				<include name="NOODS.jar"/>
 			</fileset>
 		</zip>
 	</target>
