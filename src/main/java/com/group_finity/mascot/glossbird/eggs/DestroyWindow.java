@@ -97,7 +97,6 @@ public class DestroyWindow {
 
         BackgroundPanel panel = new BackgroundPanel(overlay, BackgroundPanel.SCALED,0,0);
        // panel.setTransparentAdd(false);
-        WinDef.HWND foregroundWindow = Main.User32.INSTANCE.GetForegroundWindow();
         activeWindow = Main.getInstance().getMainMascot().getEnvironment().getActiveIE();
 
         testFrame.setSize(activeWindow.toRectangle().getSize());

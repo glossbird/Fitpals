@@ -157,6 +157,11 @@ class VirtualEnvironment extends Environment {
         }
     }
 
+    @Override
+    public String[] getAllWindows() {
+        return new String[0];
+    }
+
     public void addShimeji(final VirtualTranslucentPanel shimeji) {
         SwingUtilities.invokeLater(() -> {
             if (display.getContentPane().getSize().width > 0 && display.getContentPane().getSize().height > 0) {

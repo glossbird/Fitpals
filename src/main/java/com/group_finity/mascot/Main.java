@@ -7,6 +7,7 @@ import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.exception.ConfigurationException;
 import com.group_finity.mascot.glossbird.AlarmManager;
+import com.group_finity.mascot.glossbird.AudioManager;
 import com.group_finity.mascot.glossbird.DialogueManager;
 import com.group_finity.mascot.glossbird.EggManager;
 import com.group_finity.mascot.glossbird.eggs.DestroyWindow;
@@ -258,6 +259,9 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        //Use properties to set volume and mute in audio manager
+        //AudioManager.getInstance()
 
         getManager().start();
         diagMan.SetMainMascot(this.getMainMascot());

@@ -463,7 +463,7 @@ public class Mascot {
                 debugWindow.setWindowY(activeWindow.getTop());
                 debugWindow.setWindowWidth(activeWindow.getWidth());
                 debugWindow.setWindowHeight(activeWindow.getHeight());
-                debugWindow.setFocusedValue(String.valueOf(IsWindowFocused()));
+                debugWindow.setFocusedValue(String.valueOf(Main.getInstance().eggMan.FocusedWindow()));
 
                 Area workArea = environment.getWorkArea();
                 debugWindow.setEnvironmentX(workArea.getLeft());

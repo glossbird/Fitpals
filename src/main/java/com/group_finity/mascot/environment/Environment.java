@@ -1,5 +1,8 @@
 package com.group_finity.mascot.environment;
 
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,6 +28,8 @@ public abstract class Environment {
     public abstract void refreshCache();
 
     public abstract void dispose();
+
+    public abstract String[] getAllWindows();
 
     protected static Rectangle screenRect = new Rectangle(new Point(0, 0), Toolkit.getDefaultToolkit().getScreenSize());
 
@@ -64,6 +69,12 @@ public abstract class Environment {
 
         screenRect = virtualBounds;
     }
+
+    public WinDef.HWND getForeground()
+    {
+        return User32.INSTANCE.GetForegroundWindow();
+    }
+
 
     /**
      * Gets the area of the screen. This area includes everything from the top left to the bottom right of the display.

@@ -565,6 +565,14 @@ class X11Environment extends Environment {
     }
 
     @Override
+    public String[] getAllWindows() {
+        ArrayList<Area> visibleWin = curVisibleWin.stream().filter(Objects::nonNull).map(n -> ieContainer.get(n)).collect(Collectors.toCollection(ArrayList::new));
+        String[] array = new String[visibleWin.size()];
+        array = visibleWin.toArray(array);
+        return array;
+    }
+
+    @Override
     public Area getWorkArea() {
         return workArea;
     }

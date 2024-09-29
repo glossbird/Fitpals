@@ -27,6 +27,7 @@ public class Destroy extends Animate {
 
     private static final String DEFAULT_DESTROYEND = "";
 
+    private float timeWaiting;
     boolean userClicked = false;
     boolean openedOverlay;
     private long activeWindowId = 0;
@@ -51,6 +52,7 @@ public class Destroy extends Animate {
     public void init(final Mascot mascot) throws VariableException {
         super.init(mascot);
         log.log(Level.INFO,"Init destroy " + getDestroyInfo());
+        timeWaiting = 0;
         activeWindowId = getEnvironment().getActiveWindowId();
         if(getDestroyInfo().equals("End"))
         {
@@ -60,7 +62,15 @@ public class Destroy extends Animate {
         }
         else if(getDestroyInfo().equals("Start"))
         {
-            Main.getInstance().eggMan.CallEasterEgg("EGG:destroy","open");
+            if(getMascot().IsWindowFocused() && getEnvironment().getActiveIETitle().contains("NOODS"))
+            {
+                Main.getInstance().getManager().setBehaviorAll("GoHome");
+                super.hasNext();
+            }
+            else if(userClicked)
+            {
+                //Main.getInstance().eggMan.CallEasterEgg("EGG:destroy","open");
+            }
         }
 
     }
@@ -96,10 +106,15 @@ public class Destroy extends Animate {
                 DestroyWindow.getInstance().OpenWindow(activeWindowId);
                 log.log(Level.INFO, "User clicked");
             }
-
+            Main.getInstance().eggMan.CallEasterEgg("EGG:destroy","open");
             return true;
         }
-
+        timeWaiting++;
+        if(timeWaiting > 100)
+        {
+            log.log(Level.INFO, "PROBLEM- USER DIDNT CLICK");
+            Main.getInstance().getManager().setBehaviorAll("GoHome");
+        }
         return false;
     }
 

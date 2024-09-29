@@ -51,6 +51,9 @@ class WindowsEnvironment extends Environment {
         OUT_OF_BOUNDS
     }
 
+
+
+
     private static final Logger log = Logger.getLogger(WindowsEnvironment.class.getName());
 
     private static boolean isIE(final HWND hWnd) {
@@ -241,6 +244,11 @@ class WindowsEnvironment extends Environment {
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public String[] getAllWindows() {
+        return windowTitles;
     }
 
     @Override

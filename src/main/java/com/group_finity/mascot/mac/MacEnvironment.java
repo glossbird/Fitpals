@@ -119,6 +119,8 @@ class MacEnvironment extends Environment {
         return size;
     }
 
+
+
     private static void moveFrontmostWindow(final Point point) {
         AXUIElementRef application =
                 carbonEx.AXUIElementCreateApplication(currentPID);
@@ -327,6 +329,78 @@ class MacEnvironment extends Environment {
         updateFrontmostApp();
         updateFrontmostWindow();
     }
+
+    @Override
+    public String[] getAllWindows()
+    {
+        CFArrayRef windowInfo = CoreGraphics.INSTANCE.CGWindowListCopyWindowInfo(0, 0);
+        // Set up keys for dictionary lookup
+        CFStringRef kCGWindowNumber = CFStringRef.createCFString("kCGWindowNumber");
+        CFStringRef kCGWindowOwnerPID = CFStringRef.createCFString("kCGWindowOwnerPID");
+// Note: the Quartz name is rarely used
+        CFStringRef kCGWindowName = CFStringRef.createCFString("kCGWindowName");
+        CFStringRef kCGWindowOwnerName = CFStringRef.createCFString("kCGWindowOwnerName");
+
+// Iterate the array
+        int numWindows = windowInfo.getCount();
+        String[] windowStrings = new String[numWindows];
+        for (int i = 0; i < numWindows; i++) {
+            // For each array element, get the dictionary
+            Pointer result = windowInfo.getValueAtIndex(i);
+            CoreFoundation.CFDictionaryRef windowRef = new CoreFoundation.CFDictionaryRef(result);
+
+            // Now get information from the dictionary.
+
+            // Get a pointer to the result, in this case a CFNumber
+            result = windowRef.getValue(kCGWindowNumber);
+            // "Cast" the pointer to the appropriate type
+            CoreFoundation.CFNumberRef windowNumber = new CoreFoundation.CFNumberRef(result);
+            // CoreFoundation.INSTANCE.CFNumberGetType(windowNumber)
+            // --> 4 = kCFNumberSInt64Type, signed 64 bit so use getLong()
+
+            // Get a pointer to the result, in this case a CFNumber
+            result = windowRef.getValue(kCGWindowOwnerPID);
+            // "Cast" the pointer to the appropriate type
+            CoreFoundation.CFNumberRef windowOwnerPID = new CoreFoundation.CFNumberRef(result);
+            // CoreFoundation.INSTANCE.CFNumberGetType(windowOwnerPID)
+            // --> 4 = kCFNumberSInt64Type, signed 64 bit so use getLong()
+
+            // Get a pointer to the result, in this case a CFString
+            result = windowRef.getValue(kCGWindowName);
+            // "Cast" the pointer to the appropriate type
+            // Optional key, check for null
+            String windowName = result == null ? "" : new CFStringRef(result).stringValue();
+
+            // Get a pointer to the result, in this case a CFString
+            result = windowRef.getValue(kCGWindowOwnerName);
+            // "Cast" the pointer to the appropriate type
+            // Optional key, check for null
+            String windowOwnerName = result == null ? "" : new CFStringRef(result).stringValue();
+
+            // ... look up other keys if needed ...
+            // use ProcessHandle with the PID to get start time
+
+            // Output or add to List, etc.
+            windowStrings[i] = windowName;
+            System.out.println(windowNumber.longValue()
+                    + " (" + windowOwnerName + ", pid="
+                    + windowOwnerPID.longValue()
+                    + "): " + windowName);
+        }
+
+// CF references from "Copy" or "Create" must be released
+// release the created key references
+        kCGWindowNumber.release();
+        kCGWindowOwnerPID.release();
+        kCGWindowName.release();
+        kCGWindowOwnerName.release();
+// release the array
+        windowInfo.release();
+
+        return windowStrings;
+
+    }
+
 
     @Override
     public void moveActiveIE(final Point point) {

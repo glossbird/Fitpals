@@ -4,6 +4,8 @@ import com.group_finity.mascot.Main;
 import com.group_finity.mascot.Mascot;
 import com.group_finity.mascot.NativeFactory;
 import com.group_finity.mascot.environment.home.HomeUI;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
 
 import java.awt.*;
 
@@ -91,6 +93,16 @@ public class MascotEnvironment {
         }
 
         return activeIE;
+    }
+
+    public WinDef.HWND GetForeground()
+    {
+        return impl.getForeground();
+    }
+
+    public String[] GetAllWindows()
+    {
+        return impl.getAllWindows();
     }
 
     public String getActiveIETitle() {

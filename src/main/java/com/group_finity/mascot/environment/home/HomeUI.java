@@ -35,6 +35,65 @@ public class HomeUI {
         this.frame = frame;
     }
 
+    public JFrame DebugGraphicPanel()
+    {
+        JFrame testPane = new JFrame();
+        JPanel testPanel = new JPanel();
+        testPanel.setLayout(new BoxLayout(testPanel, BoxLayout.Y_AXIS));
+        testPane.setSize(300,400);
+        BufferedImage selfieImg;
+        try {
+            selfieImg = ImageIO.read(new File(IMAGE_DIRECTORY.toString(), "/testimage.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        JPanel panelOne = new JPanel(new FlowLayout());
+        JPanel panelTwo = new JPanel(new FlowLayout());
+        JPanel panelThree = new JPanel(new FlowLayout());
+        JPanel panelFour = new JPanel(new FlowLayout());
+
+        JLabel icon = new JLabel(new ImageIcon(selfieImg));
+        JLabel oneText = new JLabel("1x");
+
+        Image newimg = selfieImg.getScaledInstance(42, 38,  Image.SCALE_DEFAULT);
+
+        JLabel iconTwo = new JLabel(new ImageIcon(newimg));
+        iconTwo.setPreferredSize(new Dimension(42,38));
+        JLabel twoText = new JLabel("2x");
+
+         newimg = selfieImg.getScaledInstance(21*3, 19*3,  Image.SCALE_DEFAULT);
+        JLabel iconThree = new JLabel(new ImageIcon(newimg));
+        iconThree.setPreferredSize(new Dimension(21*3,19*3));
+        iconThree.setMinimumSize(new Dimension(21*3,19*3));
+        JLabel threeText = new JLabel("3x");
+
+        newimg = selfieImg.getScaledInstance(21*6, 19*6,  Image.SCALE_DEFAULT);
+        JLabel iconFour = new JLabel(new ImageIcon(newimg));
+        iconFour.setPreferredSize(new Dimension(21*6,19*6));
+        iconFour.setMinimumSize(new Dimension(21*6,19*6));
+        JLabel fourText = new JLabel("6x");
+
+        panelOne.add(icon);
+        panelOne.add(oneText);
+
+        panelTwo.add(iconTwo);
+        panelTwo.add(twoText);
+
+        panelThree.add(iconThree);
+        panelThree.add(threeText);
+
+        panelFour.add(iconFour);
+        panelFour.add(fourText);
+
+        testPanel.add(panelOne);
+        testPanel.add(panelTwo);
+        testPanel.add(panelThree);
+        testPanel.add(panelFour);
+        testPane.setLocation(loc);
+        testPane.add(testPanel);
+        return testPane;
+    }
+
     public HomeUI() throws IOException {
         super();
          frame =  new CustomTitlebar();
@@ -180,6 +239,9 @@ public class HomeUI {
 
         frame.setVisible(true);
         areaLink = new HomeArea(this);
+
+        JFrame test = DebugGraphicPanel();
+        test.setVisible(true);
     }
 
     public static Rectangle getMaxWindowBounds(JFrame frame) {

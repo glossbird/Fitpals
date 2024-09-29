@@ -128,12 +128,8 @@ public class EggManager {
 
     public boolean IsWindowFocused()
     {
-        String focusCurrent = FocusedWindow();
-        if(focusCurrent.equals(""))
-        {
-            return false;
-        }
-        else if(focusCurrent.equals("NOODS"))
+        String focusCurrent = environment.getActiveIETitle();
+        if(focusCurrent.isEmpty() || focusCurrent.contains("NOODS"))
         {
             return false;
         }
@@ -148,10 +144,11 @@ public class EggManager {
 //        return foregroundWindow != null && !Arrays.toString(windowText).equals("DOGEEZ");
     }
 
-
+    // THIS WILL NEED TO BE REWORKED
+    // I THINK ALL WINDEF.HWND CALLS ARE WINDOWS-EXCLUSIVE
     public String FocusedWindow()
     {
-        WinDef.HWND foregroundWindow = Main.User32.INSTANCE.GetForegroundWindow();
+        WinDef.HWND foregroundWindow = mainMascot.getEnvironment().GetForeground();
         byte[] windowText = new byte[512];
         if(foregroundWindow == null)
         {
@@ -249,7 +246,7 @@ public class EggManager {
 
     public void ProcessUpdate()
     {
-        String currentFocus = FocusedWindow();
+        String currentFocus = environment.getActiveIETitle();
         boolean firstUpdate;
         if(processCheckerMap == null)
         {
@@ -388,13 +385,13 @@ public class EggManager {
 
     public void FocusCheck()
     {
-        if(Objects.equals(FocusedWindow(), focusedWindow))
+        if(Objects.equals(environment.getActiveIETitle(), focusedWindow))
         {
             focusTime += 1f;
         }
         else
         {
-            focusedWindow = FocusedWindow();
+            focusedWindow = environment.getActiveIETitle();
             focusTime = 0;
         }
         focusMap.putIfAbsent("Browser", 0);

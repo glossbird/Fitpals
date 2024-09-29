@@ -26,6 +26,11 @@ class GenericEnvironment extends Environment {
     }
 
     @Override
+    public String[] getAllWindows() {
+        return new String[0];
+    }
+
+    @Override
     public void moveActiveIE(final Point point) {
     }
 
