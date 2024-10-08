@@ -300,6 +300,8 @@ public class AlarmData {
         this.enabled = (boolean) alarm.get("enabled");
         this.name = (String) alarm.get("name");
         this.id = (int)alarm.get("id");
+        this.behavior = (String) alarm.get("behavior");
+        this.sound = (String) alarm.get("sound");
     }
 
 }

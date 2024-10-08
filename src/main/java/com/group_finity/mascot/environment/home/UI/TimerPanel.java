@@ -1,25 +1,36 @@
 package com.group_finity.mascot.environment.home.UI;
 
 
+import com.group_finity.mascot.Main;
+import com.group_finity.mascot.glossbird.TimerSystem;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Locale;
+import java.util.Set;
 
 public class TimerPanel {
     private JPanel Clock;
-    private JLabel Hour;
+    private JSpinner Hour;
     private JLabel colon;
-    private JLabel Minute;
-    private JButton SetSound;
-    private JButton SetBehavior;
+    private JSpinner Minute;
+    private JComboBox SetSound;
+    private JComboBox SetBehavior;
     private JButton TimeUp;
     private JButton TimeDown;
     private JButton Start;
     private JLabel Timer;
     private JPanel contentPane;
+
+    public TimerSystem timer;
+    boolean running;
 
     public TimerPanel() {
         run();
@@ -27,13 +38,142 @@ public class TimerPanel {
 
     public void run() {
         JFrame frame = new JFrame("TimerPanel");
+        Start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ButtonToggle();
+            }
+        });
+        TimeUp.setText("+");
+        TimeUp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timer.ChangeTime(15);
+            }
+        });
+        TimeDown.setText("-");
+        TimeDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timer.ChangeTime(-15);
+            }
+        });
+
+        Hour.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                timer.setMinute((Integer) Hour.getValue());
+            }
+        });
+
+
+        Minute.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int value = (int) Minute.getValue();
+                if (value < 0) {
+                    value = 59;
+                    Minute.setValue(value);
+                } else if (value > 59) {
+                    value = 0;
+                    Minute.setValue(value);
+                }
+                Minute.setEditor(new JSpinner.NumberEditor(Minute, "00"));
+                timer.setSecond((Integer) Minute.getValue());
+
+            }
+        });
+
         frame.setContentPane(contentPane);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
+        frame.setLocation(Main.getInstance().getHome().GetHomePosition().x - 150, Main.getInstance().getHome().GetHomePosition().y);
         frame.setVisible(true);
+        running = false;
     }
 
-    public void RefreshTimes() {
+    public void init() {
+
+    }
+
+    public void SetTimeText(int minute, int second) {
+        Hour.setValue(minute);
+        Minute.setValue(second);
+    }
+
+
+    public void RefreshText() {
+        String hour = String.valueOf((timer.minute));
+        String minute = String.valueOf(((timer.second)));
+
+        if (timer.second == 0) {
+            minute = "00";
+        }
+        this.Hour.setValue(timer.minute);
+        this.Minute.setValue(timer.second);
+    }
+
+
+    public void SetSound() {
+
+    }
+
+    public void SetBehavior() {
+
+    }
+
+    public TimerSystem getTimer() {
+        return timer;
+    }
+
+    public void setTimer(TimerSystem timer) {
+        this.timer = timer;
+    }
+
+    public void UpdateStartText() {
+        if (running) {
+            Start.setText("CANCEL");
+        } else {
+            Start.setText("START");
+        }
+    }
+
+    public void ButtonToggle() {
+        if (!running) {
+            Start();
+        } else {
+            Cancel();
+        }
+        UpdateStartText();
+    }
+
+    public void Cancel() {
+        timer.Stop();
+        running = false;
+
+    }
+
+
+    public void Start() {
+        running = true;
+        timer.Start();
+    }
+
+
+    public void RefreshTimesFromDelta(float delta) {
+        int noMilis = (int) (delta / 1000);
+        int minute = noMilis / 60;
+
+        int second = noMilis % 60;
+
+        String minuteS = String.valueOf(((second)));
+        if (second == 0) {
+            minuteS = "00";
+        }
+        String hour = String.valueOf((minute));
+
+        this.Hour.setValue(minute);
+        this.Minute.setValue(second);
 
     }
 
@@ -115,12 +255,10 @@ public class TimerPanel {
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(Clock, gbc);
         Clock.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        Hour = new JLabel();
-        Hour.setHorizontalAlignment(0);
+        Hour = new JSpinner();
         Hour.setMaximumSize(new Dimension(66, 17));
         Hour.setMinimumSize(new Dimension(66, 17));
         Hour.setPreferredSize(new Dimension(66, 17));
-        Hour.setText("Label");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -136,12 +274,10 @@ public class TimerPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
         Clock.add(colon, gbc);
-        Minute = new JLabel();
-        Minute.setHorizontalAlignment(0);
+        Minute = new JSpinner();
         Minute.setMaximumSize(new Dimension(66, 17));
         Minute.setMinimumSize(new Dimension(66, 17));
         Minute.setPreferredSize(new Dimension(66, 17));
-        Minute.setText("Label");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -149,8 +285,7 @@ public class TimerPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
         Clock.add(Minute, gbc);
-        SetBehavior = new JButton();
-        SetBehavior.setText("Set Behavior");
+        SetBehavior = new JComboBox();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -158,8 +293,7 @@ public class TimerPanel {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         contentPane.add(SetBehavior, gbc);
-        SetSound = new JButton();
-        SetSound.setText("Set Sound");
+        SetSound = new JComboBox();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -197,4 +331,5 @@ public class TimerPanel {
     public JComponent $$$getRootComponent$$$() {
         return contentPane;
     }
+
 }

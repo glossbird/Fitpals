@@ -82,6 +82,13 @@
             <artifactId>jna-platform</artifactId>
             <version>5.14.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.tagtraum/ffmpeg -->
+        <dependency>
+            <groupId>com.tagtraum</groupId>
+            <artifactId>ffmpeg</artifactId>
+            <version>4.0.0</version>
+            <type>pom</type>
+        </dependency>
 
 
         <!-- https://mvnrepository.com/artifact/com.jetbrains.intellij.uiDesigner/ui-designer-->

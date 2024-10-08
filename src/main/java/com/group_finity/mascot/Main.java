@@ -6,10 +6,7 @@ import com.group_finity.mascot.environment.home.HomeUI;
 import com.group_finity.mascot.exception.BehaviorInstantiationException;
 import com.group_finity.mascot.exception.CantBeAliveException;
 import com.group_finity.mascot.exception.ConfigurationException;
-import com.group_finity.mascot.glossbird.AlarmManager;
-import com.group_finity.mascot.glossbird.AudioManager;
-import com.group_finity.mascot.glossbird.DialogueManager;
-import com.group_finity.mascot.glossbird.EggManager;
+import com.group_finity.mascot.glossbird.*;
 import com.group_finity.mascot.glossbird.eggs.DestroyWindow;
 import com.group_finity.mascot.image.ImagePairs;
 import com.group_finity.mascot.imagesetchooser.ImageSetChooser;
@@ -253,6 +250,7 @@ public class Main {
             createMascot(imageSet);
         }
         setAlarmManager( new AlarmManager());
+        setTimerSystem(new TimerSystem());
         eggMan = new EggManager();
         try {
             home = new HomeUI();
@@ -276,6 +274,15 @@ public class Main {
 
 
     boolean mainMascotSet = false;
+    public TimerSystem timerSystem;
+
+    public TimerSystem getTimerSystem() {
+        return timerSystem;
+    }
+
+    public void setTimerSystem(TimerSystem timerSystem) {
+        this.timerSystem = timerSystem;
+    }
 
     public AlarmManager getAlarmManager() {
         return alarmManager;

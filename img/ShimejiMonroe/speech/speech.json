@@ -102,19 +102,33 @@
   "EGG:destroy": {
     "speechList" : [
       {
-        "dialogue": "Time to destroy {0}",
+        "dialogue": "Time to destroy {0}!!",
         "condition": "destroy",
         "altCondition": "open",
         "variable": "window",
         "audio_id": -1
       },
       {
-        "dialogue": "{0} - Destroyed!",
+        "dialogue": "Consider {0} destroyed!",
         "condition": "destroy",
         "altCondition": "close",
         "variable": "window",
         "audio_id": -1
+      },
+      {
+        "dialogue": "Nevermind, let's hold off on destruction right now!",
+        "condition": "destroy",
+        "altCondition": "cancel",
+        "audio_id": -1
+      },
+      {
+        "dialogue": "Click what you want to destroy! I'll destroy it in 3... 2... 1...!",
+        "condition": "destroy",
+        "altCondition": "countdown",
+        "variable": "window",
+        "audio_id": -1
       }
+
     ]
 
   }

@@ -777,8 +777,8 @@
 
         <Action Name="Destroy Window" Type="Sequence" >
             <Action Type="Sequence">
-                <ActionReference Name="SitAndDangleLegs" Duration="${45}"/>
                 <ActionReference Name="Destroy" End="Start"/>
+                <ActionReference Name="SitAndDangleLegs" Duration="${45}"/>
                 <Action Type="Select" Condition="${mascot.IsWindowFocused()}">
                     <ActionReference Name="StandUp" Condition="${!mascot.IsWindowFocused()}"/>
                     <ActionReference Name="DestroyMid" Condition="${mascot.IsWindowFocused()}"/>

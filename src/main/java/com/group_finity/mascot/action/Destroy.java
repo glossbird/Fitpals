@@ -54,6 +54,7 @@ public class Destroy extends Animate {
         log.log(Level.INFO,"Init destroy " + getDestroyInfo());
         timeWaiting = 0;
         activeWindowId = getEnvironment().getActiveWindowId();
+        Main.getInstance().eggMan.CallEasterEgg("EGG:destroy","countdown");
         if(getDestroyInfo().equals("End"))
         {
             System.out.println("It was the end");
@@ -64,8 +65,7 @@ public class Destroy extends Animate {
         {
             if(getMascot().IsWindowFocused() && getEnvironment().getActiveIETitle().contains("NOODS"))
             {
-                Main.getInstance().getManager().setBehaviorAll("GoHome");
-                super.hasNext();
+                CancelDestroy();
             }
             else if(userClicked)
             {
@@ -91,14 +91,13 @@ public class Destroy extends Animate {
         return super.hasNext() && isSameWindow && ieVisible;
     }
 
-    boolean checkUserClicked()
-    {
+    boolean checkUserClicked() throws VariableException {
 
         if(getMascot().IsWindowFocused())
         {
             if(getEnvironment().getActiveIETitle().equals("NOODS"))
             {
-                Main.getInstance().getManager().setBehaviorAll("GoHome");
+                CancelDestroy();
             }
             else
             {
@@ -110,12 +109,22 @@ public class Destroy extends Animate {
             return true;
         }
         timeWaiting++;
-        if(timeWaiting > 100)
+        if(timeWaiting > 175)
         {
             log.log(Level.INFO, "PROBLEM- USER DIDNT CLICK");
-            Main.getInstance().getManager().setBehaviorAll("GoHome");
+            CancelDestroy();
+        }
+        else
+        {
+            log.log(Level.INFO, "Time is " + timeWaiting);
         }
         return false;
+    }
+
+    void CancelDestroy() throws VariableException {
+        Main.getInstance().getManager().setBehaviorAll("GoHome");
+        Main.getInstance().eggMan.CallEasterEgg("EGG:destroy","cancel");
+        super.hasNext();
     }
 
 

@@ -138,6 +138,7 @@
 				<exclude name="conf/behaviors.xml" />
 				<exclude name="conf/*Behavior.xml" />
 				<include name="lib/*" />
+				<include name="ffmpeg/*"/>
 			</fileset>
 		</zip>
 	</target>

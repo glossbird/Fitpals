@@ -193,6 +193,7 @@ public class Manager {
         eggMan.tick();
         diagMan.tick();
         Main.getInstance().alarmManager.tick();
+        Main.getInstance().timerSystem.Tick();
 
 
         if (isExitOnLastRemoved() && getMascots().isEmpty()) {

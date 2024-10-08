@@ -51,7 +51,7 @@
     }, {
       "hour" : 21,
       "minute" : 58,
-      "enabled" : false,
+      "enabled" : true,
       "name" : "New Alarm",
       "sound" : "",
       "behavior" : "",

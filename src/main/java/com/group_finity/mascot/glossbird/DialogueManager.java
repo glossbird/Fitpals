@@ -251,7 +251,14 @@ public class DialogueManager {
             replacement = replacement.replace("{0}",FillVariable(speech.getVariable()));
             speech.setDialogue(replacement);
         }
-        safeSetActiveMessage(speech.dialogue);
+        if(speech.altCondition.isEmpty())
+        {
+            safeSetActiveMessage(speech.dialogue);
+        }
+        else
+        {
+            unsafeSetActiveMessage(speech.dialogue);
+        }
         if(speech.audio_id != -1)
         {
             typewriterSound = false;
@@ -262,6 +269,25 @@ public class DialogueManager {
             typewriterSound = true;
         }
     }
+
+    public void unsafeSetActiveMessage(String activeMessage)
+    {
+        if(activeMessage.length() > 50)
+        {
+            TalkSpeed = 2;
+        }
+        else if (activeMessage.length() > 25)
+        {
+            TalkSpeed = 3;
+        }
+        else
+        {
+            TalkSpeed = 4;
+        }
+        setActiveMessage(activeMessage);
+
+    }
+
 
     public void safeSetActiveMessage(String activeMessage)
     {
@@ -276,15 +302,15 @@ public class DialogueManager {
         }
         if(activeMessage.length() > 50)
         {
-            TalkSpeed = 1;
+            TalkSpeed = 2;
         }
         else if (activeMessage.length() > 25)
         {
-            TalkSpeed = 2;
+            TalkSpeed = 3;
         }
         else
         {
-            TalkSpeed = 3;
+            TalkSpeed = 4;
         }
         setActiveMessage(activeMessage);
     }

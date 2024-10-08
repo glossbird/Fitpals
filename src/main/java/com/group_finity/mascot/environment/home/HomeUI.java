@@ -154,6 +154,9 @@ public class HomeUI {
             {
                 TimerPanel tp = new TimerPanel();
 
+                tp.setTimer(Main.getInstance().getTimerSystem());
+                Main.getInstance().timerSystem.SetPanel(tp);
+
 
 
             }
@@ -240,8 +243,8 @@ public class HomeUI {
         frame.setVisible(true);
         areaLink = new HomeArea(this);
 
-        JFrame test = DebugGraphicPanel();
-        test.setVisible(true);
+        //JFrame test = DebugGraphicPanel();
+        //test.setVisible(true);
     }
 
     public static Rectangle getMaxWindowBounds(JFrame frame) {
